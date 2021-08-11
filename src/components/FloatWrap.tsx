@@ -18,7 +18,7 @@ type FloatWrapProps = {
 };
 
 function FloatWrap({ children }: FloatWrapProps) {
-  return <div css={styles.root}></div>;
+  return <div css={styles.root}>{children}</div>;
 }
 
 export default FloatWrap;

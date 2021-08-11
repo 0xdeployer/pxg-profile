@@ -68,11 +68,11 @@ function App() {
 
   return (
     <>
-      <ProfileProvider>
-        <Route path="/:name" exact>
+      <Route path="/:name" exact>
+        <ProfileProvider>
           <Profile />
-        </Route>
-      </ProfileProvider>
+        </ProfileProvider>
+      </Route>
       <div style={{ padding: "10px" }}>
         {connectedAddress && <div>{connectedAddress}</div>}
         <input

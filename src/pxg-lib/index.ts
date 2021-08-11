@@ -10,7 +10,7 @@ import namehash from "eth-ens-namehash";
 export type AvatarType = {
   address: string;
   tokenId: string;
-  metadata: {};
+  metadata: any;
 };
 
 export type ContractTypes = {
@@ -55,6 +55,7 @@ type Network = keyof typeof REQUEST_URL;
 export default class PxgLib extends Web3Util {
   network: Network;
   contracts: ContractTypes;
+  requestUrl: string;
 
   constants = {
     ZERO_ADDRESS,
@@ -63,6 +64,7 @@ export default class PxgLib extends Web3Util {
   constructor(options?: { network?: Network }) {
     super();
     this.network = options?.network ?? "local";
+    this.requestUrl = REQUEST_URL[this.network];
     switch (this.network) {
       case "local":
         this.contracts = CONTRACTS.local;
@@ -157,7 +159,7 @@ export default class PxgLib extends Web3Util {
     const contract = this.getContract("registrar");
     if (!contract) throw new Error();
     return contract.methods
-      .claimGlyph("hello", 1)
+      .claimGlyph("nftboi", glyphId)
       .send({ from: this.accounts?.[0] });
   }
 
@@ -196,8 +198,6 @@ export default class PxgLib extends Web3Util {
 
     const tokenUri = "https://pxg-prod.herokuapp.com/metadata/1";
 
-    alert(tokenUri);
-
     let metadata = {};
 
     if (tokenUri) {
@@ -209,6 +209,52 @@ export default class PxgLib extends Web3Util {
       address,
       metadata,
     };
+  }
+
+  async setDefaultGallery(exhibitId: string) {
+    const timestamp = await fetch(`${this.requestUrl}/timestamp`).then(
+      (res) => {
+        return res.text();
+      }
+    );
+    const message = `To confirm ownership of this address, please sign this message.\n\nTimestamp: ${timestamp}`;
+    const signature = await this.signMessage(message);
+    return fetch(`${this.requestUrl}/set-gallery`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        timestamp,
+        signature,
+        exhibitId,
+        address: this.accounts?.[0],
+      }),
+    });
+  }
+
+  async getDefaultGallery(address: string) {
+    return fetch(`${this.requestUrl}/get-gallery?address=${address}`).then(
+      (res) => res.json()
+    );
+  }
+
+  private signMessage(signingMessage: string) {
+    return new Promise((resolve, reject) => {
+      if (!this.web3 || !this.accounts?.[0]) return;
+      this.web3.eth.personal.sign(
+        signingMessage,
+        this.accounts[0],
+        // @ts-ignore
+        (err: Error, result: any) => {
+          if (err) return reject(new Error(err.message));
+          if (result.error) {
+            return reject(new Error(result.error.message));
+          }
+          resolve(result);
+        }
+      );
+    });
   }
 }
 

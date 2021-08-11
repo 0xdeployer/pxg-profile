@@ -35,6 +35,11 @@ ReactDOM.render(
             body {
               padding: 1rem;
             }
+
+            a,
+            a:visited {
+              color: rgb(184, 4, 247);
+            }
           `}
         />
         <App />
