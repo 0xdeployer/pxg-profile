@@ -13,7 +13,7 @@ import Spacer from "../components/Spacer";
 import WalletAddress from "../components/WalletAddress";
 import Gallery from "../components/Gallery";
 
-const styles = {
+export const styles = {
   avatarCard: css`
     padding: 2.4rem;
     border-radius: 1.2rem;

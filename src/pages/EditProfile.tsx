@@ -1,9 +1,14 @@
 import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
 import React from "react";
-import { NavLink, useRouteMatch } from "react-router-dom";
+import { Link, NavLink, Route, useRouteMatch } from "react-router-dom";
 import FloatWrap from "../components/FloatWrap";
 import Heading from "../components/Heading";
+import Gallery from "./account/Gallery";
+import Links from "./account/Links";
+import { styles as profileStyles } from "./Profile";
+
+const { editBar } = profileStyles;
 
 const styles = {
   links: css`
@@ -18,7 +23,7 @@ const styles = {
       text-decoration: none;
       color: inherit;
       font-weight: bold;
-      margin-bottom: 2.4rem;
+      margin-bottom: 1.8rem;
     }
     & a.active {
       background: #ededed;
@@ -26,10 +31,16 @@ const styles = {
   `,
 };
 
+export type EditCommon = {
+  updateTitle: React.Dispatch<React.SetStateAction<string>>;
+};
+
 export default function EditProfile() {
   const {
     params: { name },
   } = useRouteMatch<{ name: string }>();
+
+  const [title, updateTitle] = React.useState("Account");
 
   const links = [
     {
@@ -46,26 +57,37 @@ export default function EditProfile() {
     },
   ];
   return (
-    <FloatWrap>
-      <Grid container>
-        <Grid item xs={2}>
-          <Heading tag={5}>Settings</Heading>
-          <hr />
-          <div css={styles.links}>
-            {links.map((item) => (
-              <div>
-                <NavLink exact to={item.path}>
-                  {item.name}
-                </NavLink>
-              </div>
-            ))}
-          </div>
+    <>
+      <div css={editBar}>
+        <Link to={`/${name}`}>Back to gallery</Link>
+      </div>
+      <FloatWrap>
+        <Grid container>
+          <Grid item xs={2}>
+            <Heading tag={5}>Settings</Heading>
+            <hr />
+            <div css={styles.links}>
+              {links.map((item) => (
+                <div>
+                  <NavLink exact to={item.path}>
+                    {item.name}
+                  </NavLink>
+                </div>
+              ))}
+            </div>
+          </Grid>
+          <Grid item xs={10}>
+            <Heading tag={5}>{title}</Heading>
+            <hr />
+            <Route path="/:name/edit/gallery">
+              <Gallery updateTitle={updateTitle} />
+            </Route>
+            <Route path="/:name/edit/links">
+              <Links updateTitle={updateTitle} />
+            </Route>
+          </Grid>
         </Grid>
-        <Grid item xs={10}>
-          <Heading tag={5}>Account</Heading>
-          <hr />
-        </Grid>
-      </Grid>
-    </FloatWrap>
+      </FloatWrap>
+    </>
   );
 }

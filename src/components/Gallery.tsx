@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
+import Button from "./Button";
 import Nft from "./Nft";
 import P from "./P";
 import { ProfileContext } from "./ProfileContext";
@@ -48,9 +49,14 @@ function Gallery() {
             <a
               target="_blank"
               rel="noreferrer"
+              css={css`
+                text-decoration: none;
+              `}
               href={`https://oncyber.io/exhibits/${exhibitId}`}
             >
-              View on Cyber
+              <Button variant="round" arrowRight>
+                View on Cyber
+              </Button>
             </a>
           </P>
         </Spacer>

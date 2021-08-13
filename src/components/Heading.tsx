@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import React from "react";
 
 type HeadingProps = {
-  tag?: 1 | 2 | 3 | 4 | 5;
+  tag?: 1 | 2 | 3 | 4 | 5 | 6;
   children: React.ReactNode;
 };
 
@@ -12,6 +12,7 @@ const tags = {
   3: "h3",
   4: "h4",
   5: "h2",
+  6: "h3",
 };
 
 const styles = {
@@ -39,6 +40,10 @@ const styles = {
   `,
   5: css`
     font-size: 2rem;
+    font-weight: bold;
+  `,
+  6: css`
+    font-size: 1.6rem;
     font-weight: bold;
   `,
 };

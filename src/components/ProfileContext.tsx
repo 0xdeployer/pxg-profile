@@ -17,7 +17,9 @@ export const ProfileContext = React.createContext<{
   data: ProfileDataType | null;
   nfts?: ProfileNftsType | null;
   exhibitId?: string;
-}>({ data: null, nfts: null });
+  allGalleries?: CyberExhibit[] | null;
+  getGallery?: any;
+}>({ data: null, nfts: null, allGalleries: null });
 
 export type NFTFromCyber = {
   collection: {
@@ -36,13 +38,24 @@ export type NFTFromCyber = {
   permalink: string;
 };
 
+type CyberExhibit = {
+  id: string;
+  artworks: any;
+  info: {
+    headline: string;
+    heroImg: string;
+  };
+  owner: string;
+};
+
 function ProfileProvider({ children }: { children: React.ReactNode }) {
   const context = useContext(Web3Context);
   const match = useRouteMatch<{ name: string }>();
   const [data, updateData] = useState<ProfileDataType | null>(null);
   const [nfts, updateNfts] = useState<NFTFromCyber[]>();
   const [allNfts, updateAllNfts] = useState<NFTFromCyber[]>();
-  const [exhibitId, updateExhibitId] = useState();
+  const [exhibitId, updateExhibitId] = useState<string>();
+  const [allGalleries, updateAllGalleries] = useState<CyberExhibit[]>();
 
   const getGallery = async (address: string) => {
     const { gallery } = await pxgLib.getDefaultGallery(address);
@@ -86,7 +99,23 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
         }));
       };
 
+      const getAllGalleries = async () => {
+        const data = await fetch(
+          `https://cyber-jfl9w.ondigitalocean.app/experiences/user/${pxgLib.accounts?.[0].toLowerCase()}`
+        ).then((res) => res.json());
+        if (data?.success) {
+          updateAllGalleries(
+            data.exhibits.filter(
+              (item: any) =>
+                item.owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()
+            )
+          );
+        }
+        console.log(data);
+      };
+
       getData();
+      getAllGalleries();
     }
   }, [context?.connected, match.params.name]);
   console.log(`EXHIBIT`, exhibitId);
@@ -96,6 +125,8 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
         data,
         nfts,
         exhibitId,
+        allGalleries,
+        getGallery,
       }}
     >
       {children}
