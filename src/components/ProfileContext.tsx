@@ -25,10 +25,15 @@ export type NFTFromCyber = {
     name: string;
     image_url: string;
   };
+  owner: {
+    address: string;
+  };
   name: string;
   image_url: string;
   description: string;
   token_id: string;
+  contract_address: string;
+  permalink: string;
 };
 
 function ProfileProvider({ children }: { children: React.ReactNode }) {
@@ -36,6 +41,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const match = useRouteMatch<{ name: string }>();
   const [data, updateData] = useState<ProfileDataType | null>(null);
   const [nfts, updateNfts] = useState<NFTFromCyber[]>();
+  const [allNfts, updateAllNfts] = useState<NFTFromCyber[]>();
   const [exhibitId, updateExhibitId] = useState();
 
   const getGallery = async (address: string) => {

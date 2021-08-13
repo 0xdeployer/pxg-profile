@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 import Nft from "./Nft";
 import P from "./P";
 import { ProfileContext } from "./ProfileContext";
@@ -18,7 +19,11 @@ function Gallery() {
           nfts.map((nft) => {
             return (
               <Grid item xs={4}>
-                <Nft nft={nft} />
+                <Link
+                  to={`/${data?.label}/${nft.contract_address}/${nft.token_id}`}
+                >
+                  <Nft nft={nft} />
+                </Link>
               </Grid>
             );
           })}

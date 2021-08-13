@@ -31,6 +31,7 @@ ReactDOM.render(
             body {
               font-size: 10px;
               background: #efefef;
+              color: #212121;
             }
             body {
               padding: 1rem;
@@ -39,6 +40,13 @@ ReactDOM.render(
             a,
             a:visited {
               color: rgb(184, 4, 247);
+            }
+
+            hr {
+              margin: 2.4rem 0;
+              border: none;
+              height: 1px;
+              background: #ededed;
             }
           `}
         />

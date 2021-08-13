@@ -1,5 +1,5 @@
 import React from "react";
-import { useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import FloatWrap from "../components/FloatWrap";
 import { pxgLib } from "../pxg-lib";
 import { Web3Context } from "../Web3Provider";
@@ -19,17 +19,40 @@ const styles = {
     border-radius: 1.2rem;
     border: 1px solid #dedede;
   `,
+  editBar: css`
+    display: flex;
+    justify-content: flex-end;
+    max-width: 124.8rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2rem 1rem;
+    a {
+      color: #8c8c8c;
+      font-weight: bold;
+      font-size: 1.4rem;
+      text-decoration: none;
+    }
+  `,
 };
 
 export default function Profile() {
   const context = React.useContext(Web3Context);
   const profile = React.useContext(ProfileContext);
-  const match = useRouteMatch<{ name: string }>();
+  const {
+    params: { name },
+  } = useRouteMatch<{ name: string }>();
   console.log(profile);
   return (
     <>
       {context?.connected && (
         <>
+          {context.accounts?.[0].toLowerCase() ===
+            profile.data?.owner?.toLowerCase() && (
+            <div css={styles.editBar}>
+              <Link to={`/${name}/edit`}>Edit profile</Link>
+            </div>
+          )}
+
           <FloatWrap>
             <Grid container spacing={2}>
               <Grid item xs={3}>

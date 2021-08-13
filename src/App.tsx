@@ -3,10 +3,12 @@ import logo from "./logo.svg";
 import "./App.css";
 import { pxgLib } from "./pxg-lib";
 import Profile from "./pages/Profile";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Button from "./components/Button";
 import { css } from "@emotion/react";
 import ProfileProvider from "./components/ProfileContext";
+import NftDetail from "./pages/NftDetail";
+import EditProfile from "./pages/EditProfile";
 
 const styles = {
   connect: css`
@@ -68,9 +70,19 @@ function App() {
 
   return (
     <>
-      <Route path="/:name" exact>
+      <Route path="/:name">
         <ProfileProvider>
-          <Profile />
+          <Switch>
+            <Route path="/:name" exact>
+              <Profile />
+            </Route>
+            <Route path="/:name/edit">
+              <EditProfile />
+            </Route>
+            <Route path="/:name/:address/:tokenId" exact>
+              <NftDetail />
+            </Route>
+          </Switch>
         </ProfileProvider>
       </Route>
       <div style={{ padding: "10px" }}>

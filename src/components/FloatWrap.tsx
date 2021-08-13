@@ -2,8 +2,8 @@ import { css } from "@emotion/react";
 import React from "react";
 
 const styles = {
-  root: css`
-    background: #fff;
+  root: (bg?: string) => css`
+    background: ${bg ?? "#fff"};
     width: 100%;
     max-width: 124.8rem;
     margin-left: auto;
@@ -15,10 +15,11 @@ const styles = {
 
 type FloatWrapProps = {
   children: React.ReactNode;
+  background?: string;
 };
 
-function FloatWrap({ children }: FloatWrapProps) {
-  return <div css={styles.root}>{children}</div>;
+function FloatWrap({ children, background }: FloatWrapProps) {
+  return <div css={styles.root(background)}>{children}</div>;
 }
 
 export default FloatWrap;

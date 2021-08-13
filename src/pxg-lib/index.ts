@@ -27,9 +27,9 @@ export type Metadata = {
 
 const CONTRACTS = {
   local: {
-    resolver: "0x52510235Eb5377eFF7EBde36FAF6fe55669438a5",
-    registrar: "0xFd085b383D64F87bBC84B8Cbf86A170E60204D52",
-    glyphs: "0x8ec87688325fB4d358f45529Db45C3Ac778f3F9b",
+    resolver: "0xDD64E3a017eE252eeD64d14F6e13BDccfE0B4284",
+    registrar: "0x7c698672bC11a6e4d4185F376c51A25b00cEaB0e",
+    glyphs: "0x1d2373B2FcE02EBe2138F8B50c1760EC0602D556",
   },
   rinkeby: {
     resolver: "0xAaf62011219Eb61231A49577B8C1eB149a237287",
