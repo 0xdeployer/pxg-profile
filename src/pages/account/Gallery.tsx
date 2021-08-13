@@ -58,9 +58,13 @@ export default function Gallery({ updateTitle }: GalleryProps) {
                   <div
                     onClick={async () => {
                       if (active) return;
+                      console.log(profile);
                       try {
-                        await pxgLib.setDefaultGallery(gallery.id);
-                        profile.getGallery(profile.data?.owner);
+                        await pxgLib.setDefaultGallery(
+                          profile?.data?.label as string,
+                          gallery.id
+                        );
+                        profile.getGallery(profile.data?.label);
                       } catch (e) {}
                     }}
                     css={styles.galleryItem(gallery.info.heroImg, active)}

@@ -13,6 +13,21 @@ export type AvatarType = {
   metadata: any;
 };
 
+export type Links = {
+  opensea: string;
+  makersplace: string;
+  knownorigin: string;
+  foundation: string;
+  rarible: string;
+  superrare: string;
+  cargo: string;
+
+  twitter: string;
+  instagram: string;
+  discord: string;
+  telegram: string;
+};
+
 export type ContractTypes = {
   resolver: string;
   registrar: string;
@@ -27,9 +42,9 @@ export type Metadata = {
 
 const CONTRACTS = {
   local: {
-    resolver: "0xDD64E3a017eE252eeD64d14F6e13BDccfE0B4284",
-    registrar: "0x7c698672bC11a6e4d4185F376c51A25b00cEaB0e",
-    glyphs: "0x1d2373B2FcE02EBe2138F8B50c1760EC0602D556",
+    resolver: "0xfC9E8245CCCcCd0389CCc79064267E446551cB5c",
+    registrar: "0x5418E27780632326c61314fbcBF0bCCF1eD4A73B",
+    glyphs: "0xF9F8131c5b2bedA21A2cA6aD9e96aC7d59C7c5bb",
   },
   rinkeby: {
     resolver: "0xAaf62011219Eb61231A49577B8C1eB149a237287",
@@ -159,7 +174,7 @@ export default class PxgLib extends Web3Util {
     const contract = this.getContract("registrar");
     if (!contract) throw new Error();
     return contract.methods
-      .claimGlyph("nftboi", glyphId)
+      .claimGlyph(input, glyphId)
       .send({ from: this.accounts?.[0] });
   }
 
@@ -211,7 +226,46 @@ export default class PxgLib extends Web3Util {
     };
   }
 
-  async setDefaultGallery(exhibitId: string) {
+  async setLinks(label: string, links: Links) {
+    const values = Object.values(links);
+    const r =
+      /(http:\/\/)*[\dA-z\.]+\.(ly|com|ca|fm|co|gg|build|co\.\w)((\/([\/\w\d\-?=\.])*)|(?=\s))/g;
+    if (!values.every((item) => r.test(item) || item === "")) {
+      throw new Error("invalid url");
+    }
+    const timestamp = await fetch(`${this.requestUrl}/timestamp`).then(
+      (res) => {
+        return res.text();
+      }
+    );
+    const message = `To confirm ownership of this address, please sign this message.\n\nTimestamp: ${timestamp}`;
+    const signature = await this.signMessage(message);
+    return fetch(`${this.requestUrl}/set-links`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        timestamp,
+        signature,
+        links,
+        label,
+      }),
+    });
+  }
+
+  // await getSupportedCollection() {
+  //   const contract = this.getContract('resolver');
+  //   contract.getPastEvents
+  // }
+
+  getLinks(label: string) {
+    return fetch(`${this.requestUrl}/get-links/${label}`).then((res) =>
+      res.json()
+    );
+  }
+
+  async setDefaultGallery(label: string, exhibitId: string) {
     const timestamp = await fetch(`${this.requestUrl}/timestamp`).then(
       (res) => {
         return res.text();
@@ -228,14 +282,14 @@ export default class PxgLib extends Web3Util {
         timestamp,
         signature,
         exhibitId,
-        address: this.accounts?.[0],
+        label,
       }),
     });
   }
 
-  async getDefaultGallery(address: string) {
-    return fetch(`${this.requestUrl}/get-gallery?address=${address}`).then(
-      (res) => res.json()
+  async getDefaultGallery(label: string) {
+    return fetch(`${this.requestUrl}/get-gallery/${label}`).then((res) =>
+      res.json()
     );
   }
 

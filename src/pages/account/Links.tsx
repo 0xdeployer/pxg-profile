@@ -1,9 +1,13 @@
 import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
+import Button from "../../components/Button";
 import Heading from "../../components/Heading";
+import P from "../../components/P";
+import { ProfileContext } from "../../components/ProfileContext";
 import Spacer from "../../components/Spacer";
 import TextInput from "../../components/TextInput";
+import { pxgLib } from "../../pxg-lib";
 import { EditCommon } from "../EditProfile";
 
 type LinksProps = EditCommon;
@@ -16,31 +20,68 @@ const styles = {
   `,
 };
 
+const initialLinkState = {
+  opensea: "",
+  makersplace: "",
+  knownorigin: "",
+  foundation: "",
+  rarible: "",
+  superrare: "",
+  mintable: "",
+  cargo: "",
+
+  twitter: "",
+  instagram: "",
+  discord: "",
+  telegram: "",
+};
+
 export default function Links({ updateTitle }: LinksProps) {
+  const profile = useContext(ProfileContext);
+  const [values, updateValues] = React.useState(initialLinkState);
+
+  const [loading, updateLoading] = React.useState(false);
+  const [success, updateSuccess] = React.useState(false);
+  const [error, updateError] = React.useState(false);
   React.useEffect(() => {
     updateTitle("Profile links");
-  }, []);
-  const [values, updateValues] = React.useState({
-    opensea: "",
-    makersplace: "",
-    knownorigin: "",
-    foundation: "",
-    rarible: "",
-    superrare: "",
-    mintable: "",
-    cargo: "",
-
-    twitter: "",
-    instagram: "",
-    discord: "",
-    telegram: "",
-  });
+    const fn = async () => {
+      if (!profile?.data?.label) return;
+      const { links } = await pxgLib.getLinks(profile?.data?.label);
+      const current = links.reduce((a: any, link: any) => {
+        a[link.key] = link.value;
+        return a;
+      }, {});
+      updateValues({
+        ...initialLinkState,
+        ...current,
+      });
+    };
+    fn();
+  }, [profile?.data?.owner]);
 
   const onChange = (name: any, value: any) => {
     updateValues((v) => ({
       ...v,
       [name]: value,
     }));
+  };
+
+  const save = async () => {
+    if (error) {
+      updateError(false);
+    }
+    updateLoading(true);
+    try {
+      await pxgLib.setLinks(profile.data?.label as string, values);
+      updateSuccess(true);
+      setTimeout(() => {
+        updateSuccess(false);
+      }, 10000);
+    } catch (e) {
+      updateError(true);
+    }
+    updateLoading(false);
   };
   return (
     <>
@@ -148,6 +189,15 @@ export default function Links({ updateTitle }: LinksProps) {
           </div>
         </Grid>
       </Grid>
+      <hr />
+      <Button disabled={loading} onClick={save} variant="round">
+        {loading ? "Please wait" : "Save all changes"}
+      </Button>
+      {success && (
+        <Spacer t="2.4rem">
+          <P>Your changes have been saved!</P>
+        </Spacer>
+      )}
     </>
   );
 }

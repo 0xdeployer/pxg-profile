@@ -19,7 +19,8 @@ export const ProfileContext = React.createContext<{
   exhibitId?: string;
   allGalleries?: CyberExhibit[] | null;
   getGallery?: any;
-}>({ data: null, nfts: null, allGalleries: null });
+  links?: LinkType[] | null;
+}>({ links: null, data: null, nfts: null, allGalleries: null });
 
 export type NFTFromCyber = {
   collection: {
@@ -48,6 +49,12 @@ type CyberExhibit = {
   owner: string;
 };
 
+export type LinkType = {
+  category: "collection" | "social";
+  key: string;
+  value: string;
+};
+
 function ProfileProvider({ children }: { children: React.ReactNode }) {
   const context = useContext(Web3Context);
   const match = useRouteMatch<{ name: string }>();
@@ -56,9 +63,10 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [allNfts, updateAllNfts] = useState<NFTFromCyber[]>();
   const [exhibitId, updateExhibitId] = useState<string>();
   const [allGalleries, updateAllGalleries] = useState<CyberExhibit[]>();
+  const [links, updateLinks] = useState<LinkType[]>();
 
-  const getGallery = async (address: string) => {
-    const { gallery } = await pxgLib.getDefaultGallery(address);
+  const getGallery = async () => {
+    const { gallery } = await pxgLib.getDefaultGallery(match.params.name);
     if (gallery?.id) {
       updateExhibitId(gallery?.id);
     }
@@ -72,11 +80,32 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (context?.connected) {
+      const getAllGalleries = async () => {
+        const data = await fetch(
+          `https://cyber-jfl9w.ondigitalocean.app/experiences/user/${pxgLib.accounts?.[0].toLowerCase()}`
+        ).then((res) => res.json());
+        if (data?.success) {
+          updateAllGalleries(
+            data.exhibits.filter(
+              (item: any) =>
+                item.owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()
+            )
+          );
+        }
+        console.log(data);
+      };
       const getData = async () => {
         let owner = "";
         try {
           owner = await pxgLib.ownerOfNode(match.params.name);
-          getGallery(owner);
+          if (owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()) {
+            getAllGalleries();
+          }
+          const { links: currentLinks } = await pxgLib.getLinks(
+            match.params.name
+          );
+          updateLinks(currentLinks);
+          getGallery();
         } catch (e) {
           if (e.message.includes("owner query for nonexistent token")) {
             // can register token
@@ -99,23 +128,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
         }));
       };
 
-      const getAllGalleries = async () => {
-        const data = await fetch(
-          `https://cyber-jfl9w.ondigitalocean.app/experiences/user/${pxgLib.accounts?.[0].toLowerCase()}`
-        ).then((res) => res.json());
-        if (data?.success) {
-          updateAllGalleries(
-            data.exhibits.filter(
-              (item: any) =>
-                item.owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()
-            )
-          );
-        }
-        console.log(data);
-      };
-
       getData();
-      getAllGalleries();
     }
   }, [context?.connected, match.params.name]);
   console.log(`EXHIBIT`, exhibitId);
@@ -127,6 +140,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
         exhibitId,
         allGalleries,
         getGallery,
+        links,
       }}
     >
       {children}

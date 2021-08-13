@@ -12,6 +12,7 @@ import P from "../components/P";
 import Spacer from "../components/Spacer";
 import WalletAddress from "../components/WalletAddress";
 import Gallery from "../components/Gallery";
+import Links from "../components/Links";
 
 export const styles = {
   avatarCard: css`
@@ -73,6 +74,7 @@ export default function Profile() {
                       <WalletAddress address={profile.data.owner} />
                     </a>
                   )}
+                  <Links />
                 </div>
               </Grid>
               <Grid item xs={9}>

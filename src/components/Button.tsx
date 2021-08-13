@@ -9,6 +9,7 @@ type ButtonProps = {
   variant?: "default" | "round" | "roundAlt";
   arrowRight?: true;
   arrowLeft?: true;
+  disabled?: boolean;
 };
 
 const styles = {
@@ -52,10 +53,11 @@ function Button({
   onClick,
   variant = "default",
   arrowRight,
+  disabled,
   arrowLeft,
 }: ButtonProps) {
   return (
-    <button onClick={onClick} css={variants[variant]}>
+    <button disabled={disabled} onClick={onClick} css={variants[variant]}>
       {arrowLeft && (
         <div css={css(styles.icon, `margin-right: 1rem;`)}>
           <ArrowBackIcon />

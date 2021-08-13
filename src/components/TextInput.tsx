@@ -21,7 +21,14 @@ const styles = {
     border-radius: 100px;
     font-family: Inter;
     width: 100%;
+    border: 2px solid #ededed;
+
     padding: 1rem 1.6rem;
+
+    &:focus {
+      outline: none;
+      border: 2px solid blue;
+    }
   `,
 };
 
