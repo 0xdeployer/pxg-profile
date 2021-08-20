@@ -13,6 +13,9 @@ import Spacer from "../components/Spacer";
 import WalletAddress from "../components/WalletAddress";
 import Gallery from "../components/Gallery";
 import Links from "../components/Links";
+import Heading from "../components/Heading";
+import Button from "../components/Button";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 export const styles = {
   avatarCard: css`
@@ -33,6 +36,12 @@ export const styles = {
       font-size: 1.4rem;
       text-decoration: none;
     }
+  `,
+  loadingWrap: css`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   `,
 };
 
@@ -78,6 +87,25 @@ export default function Profile() {
                 </div>
               </Grid>
               <Grid item xs={9}>
+                {profile.loading && (
+                  <>
+                    <div css={styles.loadingWrap}>
+                      <LoadingIndicator />
+                    </div>
+                  </>
+                )}
+
+                {!profile.loading && (
+                  <>
+                    {!profile.data?.owner && (
+                      <>
+                        <Heading tag={2}>This name may be available!</Heading>
+                        <Button>Register Name</Button>
+                      </>
+                    )}
+                  </>
+                )}
+
                 <Gallery />
               </Grid>
             </Grid>

@@ -4,6 +4,7 @@ import { provider } from "web3-core";
 import { abi } from "./contracts/glyphs.json";
 import { abi as resolverAbi } from "./contracts/resolver.json";
 import { abi as registrarAbi } from "./contracts/registrar.json";
+import { abi as test721Abi } from "./contracts/test721.json";
 // @ts-ignore
 import namehash from "eth-ens-namehash";
 
@@ -42,9 +43,9 @@ export type Metadata = {
 
 const CONTRACTS = {
   local: {
-    resolver: "0xfC9E8245CCCcCd0389CCc79064267E446551cB5c",
-    registrar: "0x5418E27780632326c61314fbcBF0bCCF1eD4A73B",
-    glyphs: "0xF9F8131c5b2bedA21A2cA6aD9e96aC7d59C7c5bb",
+    resolver: "0xC4E5aB9C455bC2Df3aADC8617AFa617B42831487",
+    registrar: "0x7c22FFe2e4197003b9a0538AF39ef142Fe005531",
+    glyphs: "0x3bfFBb5641e9F1C08D1f0d099C90bDE7CcBBD128",
   },
   rinkeby: {
     resolver: "0xAaf62011219Eb61231A49577B8C1eB149a237287",
@@ -98,6 +99,17 @@ export default class PxgLib extends Web3Util {
   private getContract(name: keyof ContractTypes) {
     if (!this.web3) return this.err("Web3 not defined");
     return new this.web3.eth.Contract(ABI[name] as any, this.contracts[name]);
+  }
+
+  mintTest(id: string) {
+    const web3 = this.web3;
+    if (!web3) return;
+    if (!this.accounts) return;
+    // @ts-ignore
+    const contract = new web3.eth.Contract(test721Abi, this.contracts.glyphs);
+    return contract.methods
+      .mint(1, this.accounts[0])
+      .send({ from: this.accounts[0] });
   }
 
   async getGlyphs() {

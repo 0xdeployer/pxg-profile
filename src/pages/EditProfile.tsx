@@ -4,6 +4,7 @@ import React from "react";
 import { Link, NavLink, Route, useRouteMatch } from "react-router-dom";
 import FloatWrap from "../components/FloatWrap";
 import Heading from "../components/Heading";
+import Account from "./account/Account";
 import Gallery from "./account/Gallery";
 import Links from "./account/Links";
 import { styles as profileStyles } from "./Profile";
@@ -79,6 +80,9 @@ export default function EditProfile() {
           <Grid item xs={10}>
             <Heading tag={5}>{title}</Heading>
             <hr />
+            <Route path="/:name/edit" exact>
+              <Account />
+            </Route>
             <Route path="/:name/edit/gallery">
               <Gallery updateTitle={updateTitle} />
             </Route>

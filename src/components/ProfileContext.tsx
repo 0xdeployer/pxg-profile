@@ -17,10 +17,11 @@ export const ProfileContext = React.createContext<{
   data: ProfileDataType | null;
   nfts?: ProfileNftsType | null;
   exhibitId?: string;
+  loading: boolean;
   allGalleries?: CyberExhibit[] | null;
   getGallery?: any;
   links?: LinkType[] | null;
-}>({ links: null, data: null, nfts: null, allGalleries: null });
+}>({ links: null, data: null, nfts: null, allGalleries: null, loading: true });
 
 export type NFTFromCyber = {
   collection: {
@@ -64,6 +65,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [exhibitId, updateExhibitId] = useState<string>();
   const [allGalleries, updateAllGalleries] = useState<CyberExhibit[]>();
   const [links, updateLinks] = useState<LinkType[]>();
+  const [loading, updateLoading] = useState(true);
 
   const getGallery = async () => {
     const { gallery } = await pxgLib.getDefaultGallery(match.params.name);
@@ -126,6 +128,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
           avatar,
           label: namehash.normalize(`${match.params.name}`),
         }));
+        updateLoading(false);
       };
 
       getData();
@@ -137,6 +140,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
       value={{
         data,
         nfts,
+        loading,
         exhibitId,
         allGalleries,
         getGallery,
