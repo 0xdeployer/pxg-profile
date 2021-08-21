@@ -1,10 +1,13 @@
 import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
 import React, { useContext } from "react";
+import { pxgLib } from "../pxg-lib";
 import web3Util from "../pxg-lib/web3.util";
 import Button from "./Button";
+import Checkmark from "./Checkmark";
 import Heading from "./Heading";
 import LoadingIndicator from "./LoadingIndicator";
+import P from "./P";
 import { ProfileContext } from "./ProfileContext";
 import Select from "./Select";
 import Spacer from "./Spacer";
@@ -26,6 +29,7 @@ const styles = {
     position: absolute;
     width: 100%;
     height: 100%;
+    z-index: 12;
     background: rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
@@ -41,6 +45,7 @@ const styles = {
     width: 100%;
     height: auto;
     display: flex;
+    position: relative;
     border-radius: 200px;
     overflow: hidden;
     & img {
@@ -53,6 +58,28 @@ const styles = {
     & button:first-child {
       margin-right: 1.6rem;
     }
+  `,
+  avatarWrap: css`
+    max-width: 7.4rem;
+    width: 100%;
+    height: auto;
+    position: relative;
+  `,
+  activeBadge: css`
+    width: 100%;
+    height: 100%;
+    border-radius: 200px;
+    border: 4px solid #1b63f0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  `,
+  activeCheckmark: css`
+    width: 2.4rem;
+    top: 0;
+    right: 0;
+    height: 2.4rem;
+    position: absolute;
   `,
 };
 
@@ -90,15 +117,13 @@ const useContractResults = (
   const [loading, updateLoading] = React.useState(true);
   const context = useContext(ProfileContext);
 
-  console.log(results);
-
   React.useEffect(() => {
     if (!context.data?.owner) return;
     updateLoading(true);
     const fn = async () => {
       const [current, next] = await Promise.all([
         fetch(
-          `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${
+          `https://api.opensea.io/api/v1/assets?order_direction=asc&offset=${
             offset * LIMIT
           }&limit=${LIMIT}&owner=${
             context.data?.owner
@@ -110,7 +135,7 @@ const useContractResults = (
           }
         ).then((r) => r.json()),
         fetch(
-          `https://api.opensea.io/api/v1/assets?order_direction=desc&offset=${
+          `https://api.opensea.io/api/v1/assets?order_direction=asc&offset=${
             (offset + 1) * LIMIT
           }&limit=${LIMIT}&owner=${
             context.data?.owner
@@ -134,19 +159,25 @@ const options = [
   {
     id: "pxg",
     displayValue: "Pixelglyphs",
+    link: "https://opensea.io/collection/pixelglyphs",
   },
   {
     id: "mooncats",
     displayValue: "Mooncats",
+    link: "https://opensea.io/collection/acclimatedmooncats",
   },
+
   {
     id: "punks",
     displayValue: "CryptoPunks",
+    link: "https://opensea.io/collection/cryptopunks",
   },
 ];
 
 export default function ChangeAvatar() {
+  const profile = useContext(ProfileContext);
   const [selectedOption, updateSelectedOption] = React.useState<ID>("pxg");
+  const currentOption = options.find((opt) => opt.id === selectedOption);
   const [offset, updateOffset] = React.useState(0);
   const { loading, results } = useContractResults(selectedOption, offset);
   const updatePage = (num: number) => () => {
@@ -192,13 +223,38 @@ export default function ChangeAvatar() {
           <Grid container spacing={2}>
             {results && results.current.assets.length > 0 && (
               <>
-                {results.current.assets.map((asset) => (
-                  <Grid key={asset.token_id} item xs={3}>
-                    <div css={styles.imageWrap}>
-                      <img src={asset.image_url} />
-                    </div>
-                  </Grid>
-                ))}
+                {results.current.assets.map((asset) => {
+                  const address = addresses[selectedOption];
+                  const active =
+                    address.toLowerCase() ===
+                      profile.data?.avatar?.address?.toLowerCase() &&
+                    asset.token_id == profile.data?.avatar?.tokenId;
+                  const label = profile.data?.label;
+                  return (
+                    <Grid key={asset.token_id} item xs={3}>
+                      <div
+                        onClick={() => {
+                          pxgLib.setDefaultAvatar(
+                            label as string,
+                            address,
+                            asset.token_id
+                          );
+                        }}
+                        css={styles.avatarWrap}
+                      >
+                        <div css={styles.imageWrap}>
+                          <img src={asset.image_url} />
+                        </div>
+                        {active && <div css={styles.activeBadge}></div>}
+                        {active && (
+                          <div css={styles.activeCheckmark}>
+                            <Checkmark />
+                          </div>
+                        )}
+                      </div>
+                    </Grid>
+                  );
+                })}
               </>
             )}
           </Grid>
@@ -222,6 +278,31 @@ export default function ChangeAvatar() {
             </div>
           </Spacer>
         </div>
+      </Spacer>
+      <hr />
+      <a
+        css={css`
+          text-decoration: none;
+        `}
+        target="_blank"
+        href={currentOption?.link}
+        rel="noreferrer"
+      >
+        <Button arrowRight variant="round">
+          {currentOption?.displayValue} on OpenSea
+        </Button>
+      </a>
+      <Spacer t="2rem">
+        <P
+          styles={{
+            root: css`
+              font-size: 1rem;
+              color: #888;
+            `,
+          }}
+        >
+          Data provided by OpenSea
+        </P>
       </Spacer>
     </>
   );

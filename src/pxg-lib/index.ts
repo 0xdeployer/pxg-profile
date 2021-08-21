@@ -5,6 +5,7 @@ import { abi } from "./contracts/glyphs.json";
 import { abi as resolverAbi } from "./contracts/resolver.json";
 import { abi as registrarAbi } from "./contracts/registrar.json";
 import { abi as test721Abi } from "./contracts/test721.json";
+import isURL from "validator/lib/isURL";
 // @ts-ignore
 import namehash from "eth-ens-namehash";
 
@@ -43,9 +44,9 @@ export type Metadata = {
 
 const CONTRACTS = {
   local: {
-    resolver: "0xC4E5aB9C455bC2Df3aADC8617AFa617B42831487",
-    registrar: "0x7c22FFe2e4197003b9a0538AF39ef142Fe005531",
-    glyphs: "0x3bfFBb5641e9F1C08D1f0d099C90bDE7CcBBD128",
+    resolver: "0x6BcB3aC8641a9535888299EdE7D15EC3aE9e7071",
+    registrar: "0x70890aFeC0E5758A729787Eb08c981151C33A228",
+    glyphs: "0xc82BA0a9eDCD3DBf23AF7974F155720C50ac6eaF",
   },
   rinkeby: {
     resolver: "0xAaf62011219Eb61231A49577B8C1eB149a237287",
@@ -96,7 +97,7 @@ export default class PxgLib extends Web3Util {
     throw new Error(`PXG LIB: ${msg ?? ""}`);
   }
 
-  private getContract(name: keyof ContractTypes) {
+  getContract(name: keyof ContractTypes) {
     if (!this.web3) return this.err("Web3 not defined");
     return new this.web3.eth.Contract(ABI[name] as any, this.contracts[name]);
   }
@@ -163,6 +164,7 @@ export default class PxgLib extends Web3Util {
     return {
       tokenId: token,
       label: `${label}.pxg.eth`,
+      name: label,
     };
   }
 
@@ -240,9 +242,12 @@ export default class PxgLib extends Web3Util {
 
   async setLinks(label: string, links: Links) {
     const values = Object.values(links);
-    const r =
-      /(http:\/\/)*[\dA-z\.]+\.(ly|com|ca|fm|co|gg|build|co\.\w)((\/([\/\w\d\-?=\.])*)|(?=\s))/g;
-    if (!values.every((item) => r.test(item) || item === "")) {
+
+    if (
+      !values.every(
+        (item) => isURL(item, { require_protocol: false }) || item === ""
+      )
+    ) {
       throw new Error("invalid url");
     }
     const timestamp = await fetch(`${this.requestUrl}/timestamp`).then(

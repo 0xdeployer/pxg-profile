@@ -1,9 +1,17 @@
 import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
-import React from "react";
-import { Link, NavLink, Route, useRouteMatch } from "react-router-dom";
+import React, { useContext } from "react";
+import {
+  Link,
+  NavLink,
+  Redirect,
+  Route,
+  useRouteMatch,
+} from "react-router-dom";
 import FloatWrap from "../components/FloatWrap";
 import Heading from "../components/Heading";
+import { ProfileContext } from "../components/ProfileContext";
+import { pxgLib } from "../pxg-lib";
 import Account from "./account/Account";
 import Gallery from "./account/Gallery";
 import Links from "./account/Links";
@@ -41,6 +49,8 @@ export default function EditProfile() {
     params: { name },
   } = useRouteMatch<{ name: string }>();
 
+  const profile = useContext(ProfileContext);
+
   const [title, updateTitle] = React.useState("Account");
 
   const links = [
@@ -57,6 +67,11 @@ export default function EditProfile() {
       path: `/${name}/edit/links`,
     },
   ];
+  if (
+    profile?.data?.owner?.toLowerCase() !== pxgLib.accounts?.[0]?.toLowerCase()
+  ) {
+    return <Redirect to={`/${name}`} />;
+  }
   return (
     <>
       <div css={editBar}>

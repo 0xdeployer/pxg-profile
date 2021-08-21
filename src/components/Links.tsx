@@ -18,6 +18,7 @@ const labels: any = {
   instagram: "Instagram",
   discord: "Discord",
   telegram: "Telegram",
+  website: "Personal Site",
 };
 
 const Link = (props: { item: LinkType }) => (

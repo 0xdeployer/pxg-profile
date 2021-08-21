@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { pxgLib } from "./pxg-lib";
 import Profile from "./pages/Profile";
@@ -9,6 +8,7 @@ import { css } from "@emotion/react";
 import ProfileProvider from "./components/ProfileContext";
 import NftDetail from "./pages/NftDetail";
 import EditProfile from "./pages/EditProfile";
+import P from "./components/P";
 
 const styles = {
   connect: css`
@@ -16,6 +16,16 @@ const styles = {
     align-items: center;
     justify-content: center;
     padding: 5rem 2rem;
+  `,
+  metamask: css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    height: 100%;
+    & p {
+      color: #8c8c8c;
+    }
   `,
 };
 
@@ -56,14 +66,24 @@ function App() {
     }
   }, []);
 
-  const claim = () => {
-    pxgLib.claimFromGlyph("1", name);
-  };
-
-  if (!connectedAddress) {
+  if (!connectedAddress && pxgLib.hasProvider) {
     return (
       <div css={styles.connect}>
         <Button onClick={connect}>Connect Wallet</Button>
+      </div>
+    );
+  }
+
+  if (!connectedAddress && !pxgLib.hasProvider) {
+    return (
+      <div css={styles.metamask}>
+        <P weight="bold">
+          You will need to{" "}
+          <a href="https://metamask.io" target="_blank" rel="noreferrer">
+            download Metamask
+          </a>{" "}
+          to interact with this site.
+        </P>
       </div>
     );
   }
@@ -85,27 +105,6 @@ function App() {
           </Switch>
         </ProfileProvider>
       </Route>
-      <div style={{ padding: "10px" }}>
-        {connectedAddress && <div>{connectedAddress}</div>}
-        <input
-          value={name}
-          onChange={(e) => {
-            updateName(e.target.value);
-          }}
-        />
-
-        <button onClick={claim}>Claim</button>
-        <button onClick={connect}>Connect</button>
-        <hr />
-        {glyphs &&
-          glyphs.length > 0 &&
-          glyphs.map((g) => (
-            <div key={g.name}>
-              {g.name} - ID: {g.tokenId}
-            </div>
-          ))}
-        <hr />
-      </div>
     </>
   );
 }

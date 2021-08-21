@@ -34,6 +34,7 @@ const initialLinkState = {
   instagram: "",
   discord: "",
   telegram: "",
+  website: "",
 };
 
 export default function Links({ updateTitle }: LinksProps) {
@@ -79,6 +80,7 @@ export default function Links({ updateTitle }: LinksProps) {
         updateSuccess(false);
       }, 10000);
     } catch (e) {
+      console.log(e);
       updateError(true);
     }
     updateLoading(false);
@@ -166,6 +168,13 @@ export default function Links({ updateTitle }: LinksProps) {
               label="Instagram"
               value={values.instagram}
               placeholder="instagram.com/"
+              onChange={onChange}
+            />
+            <TextInput
+              name="website"
+              label="Personal Website"
+              value={values.website}
+              placeholder="you.com"
               onChange={onChange}
             />
           </div>

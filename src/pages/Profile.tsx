@@ -43,6 +43,15 @@ export const styles = {
     justify-content: center;
     height: 100%;
   `,
+  forSale: css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    & p {
+      color: #8c8c8c;
+    }
+  `,
 };
 
 export default function Profile() {
@@ -51,7 +60,7 @@ export default function Profile() {
   const {
     params: { name },
   } = useRouteMatch<{ name: string }>();
-  console.log(profile);
+
   return (
     <>
       {context?.connected && (
@@ -98,10 +107,12 @@ export default function Profile() {
                 {!profile.loading && (
                   <>
                     {!profile.data?.owner && (
-                      <>
-                        <Heading tag={2}>This name may be available!</Heading>
-                        <Button>Register Name</Button>
-                      </>
+                      <div css={styles.forSale}>
+                        <P weight="bold">
+                          This name may be available. You can register this name{" "}
+                          <a href="">here</a>.
+                        </P>
+                      </div>
                     )}
                   </>
                 )}

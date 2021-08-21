@@ -27,7 +27,6 @@ const styles = {
     height: ${heightString};
     display: flex;
     position: relative;
-    padding: 0 1.6rem;
 
     align-items: center;
   `,
@@ -38,6 +37,7 @@ const styles = {
     align-items: center;
     overflow: hidden;
     cursor: pointer;
+    padding: 0 1.6rem;
   `,
   arrow: css`
     width: 12px;

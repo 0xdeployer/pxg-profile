@@ -18,10 +18,18 @@ export const ProfileContext = React.createContext<{
   nfts?: ProfileNftsType | null;
   exhibitId?: string;
   loading: boolean;
+  exhibitsLoading: boolean;
   allGalleries?: CyberExhibit[] | null;
   getGallery?: any;
   links?: LinkType[] | null;
-}>({ links: null, data: null, nfts: null, allGalleries: null, loading: true });
+}>({
+  links: null,
+  data: null,
+  nfts: null,
+  allGalleries: null,
+  loading: true,
+  exhibitsLoading: true,
+});
 
 export type NFTFromCyber = {
   collection: {
@@ -66,6 +74,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const [allGalleries, updateAllGalleries] = useState<CyberExhibit[]>();
   const [links, updateLinks] = useState<LinkType[]>();
   const [loading, updateLoading] = useState(true);
+  const [exhibitsLoading, updateExhibitsLoading] = useState(true);
 
   const getGallery = async () => {
     const { gallery } = await pxgLib.getDefaultGallery(match.params.name);
@@ -78,6 +87,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
       );
       updateNfts(nfts);
     }
+    updateExhibitsLoading(false);
   };
 
   React.useEffect(() => {
@@ -94,7 +104,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
             )
           );
         }
-        console.log(data);
       };
       const getData = async () => {
         let owner = "";
@@ -141,6 +150,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
         data,
         nfts,
         loading,
+        exhibitsLoading,
         exhibitId,
         allGalleries,
         getGallery,
