@@ -20,6 +20,10 @@ const styles = {
     border-radius: 5px;
     border: 0;
     font-size: 1.6rem;
+
+    &:disabled {
+      opacity: 0.5;
+    }
   `,
   round: css`
     border: 1px solid #dedede;
