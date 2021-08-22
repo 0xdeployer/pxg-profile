@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import FloatWrap from "../components/FloatWrap";
-import { pxgLib } from "../pxg-lib";
 import { Web3Context } from "../Web3Provider";
 import Grid from "@material-ui/core/Grid";
 import { css } from "@emotion/react";
@@ -13,7 +12,6 @@ import Spacer from "../components/Spacer";
 import WalletAddress from "../components/WalletAddress";
 import Gallery from "../components/Gallery";
 import Links from "../components/Links";
-import Heading from "../components/Heading";
 import Button from "../components/Button";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Nft from "../components/Nft";
@@ -23,7 +21,7 @@ export const styles = {
     padding: 2.4rem;
     border-radius: 1.2rem;
     position: sticky;
-    top: 0;
+    top: 1rem;
     border: 1px solid #dedede;
   `,
   editBar: css`
@@ -68,7 +66,7 @@ export default function Profile() {
 
   const [nfts, updateNfts] = React.useState<any>(null);
   const [apiOffset, updateApiOffset] = React.useState(0);
-  const [hideLoadMore, updateHideLoadMore] = React.useState(false);
+  const [hideLoadMore, updateHideLoadMore] = React.useState(true);
   const [loading, updateLoading] = React.useState(false);
 
   async function getNfts(offset = apiOffset) {
@@ -84,6 +82,8 @@ export default function Profile() {
     ).then((res) => res.json());
     if (Array.isArray(res?.assets) && res.assets.length === 0) {
       updateHideLoadMore(true);
+    } else {
+      updateHideLoadMore(false);
     }
     const assets = res?.assets ?? [];
     updateNfts((c: any) => [...(c ?? []), ...assets]);
@@ -165,7 +165,7 @@ export default function Profile() {
                       return (
                         <Grid item xs={4}>
                           <Link
-                            to={`/${profile.data?.label}/${nft.contract_address}/${nft.token_id}`}
+                            to={`/${profile.data?.label}/${nft.asset_contract.address}/${nft.token_id}`}
                           >
                             <Nft nft={nft} />
                           </Link>
