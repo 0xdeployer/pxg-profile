@@ -1,6 +1,4 @@
-import Web3 from "web3";
 import { Web3Util } from "./web3.util";
-import { provider } from "web3-core";
 import { abi } from "./contracts/glyphs.json";
 import { abi as resolverAbi } from "./contracts/resolver.json";
 import { abi as registrarAbi } from "./contracts/registrar.json";
@@ -49,8 +47,8 @@ const CONTRACTS = {
     glyphs: "0xc82BA0a9eDCD3DBf23AF7974F155720C50ac6eaF",
   },
   rinkeby: {
-    resolver: "0xAaf62011219Eb61231A49577B8C1eB149a237287",
-    registrar: "0x4CF84d4Cf28d17EA515ac13D002F5a239dB838E1",
+    resolver: "0x066134888FC6eb1AD0A8fe7C22402dB9b0E408d9",
+    registrar: "0xB454A2d8Fca4FfA3747E8c90bE99d865cb44F98c",
     glyphs: "0x7605F0BbbFfc6A12Fb5a9b969Fb969f36AE6d777",
   },
 };
@@ -65,6 +63,13 @@ const ABI = {
 
 const REQUEST_URL = {
   local: "http://localhost:3000",
+  rinkeby: "http://localhost:3000",
+};
+
+const NODES = {
+  local: "pxg.eth",
+  rinkeby: "pxgtester.test",
+  live: "pxg.eth",
 };
 
 type Network = keyof typeof REQUEST_URL;
@@ -76,21 +81,27 @@ export default class PxgLib extends Web3Util {
 
   constants = {
     ZERO_ADDRESS,
+    NODE: "",
   };
 
   constructor(options?: { network?: Network }) {
     super();
     this.network = options?.network ?? "local";
     this.requestUrl = REQUEST_URL[this.network];
+    this.constants.NODE = NODES[this.network];
     switch (this.network) {
       case "local":
         this.contracts = CONTRACTS.local;
+        break;
+      case "rinkeby":
+        this.contracts = CONTRACTS.rinkeby;
         break;
       default:
         throw new Error("Should have network set");
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   reverseLookup() {}
 
   private err(msg?: string) {
@@ -109,7 +120,7 @@ export default class PxgLib extends Web3Util {
     // @ts-ignore
     const contract = new web3.eth.Contract(test721Abi, this.contracts.glyphs);
     return contract.methods
-      .mint(1, this.accounts[0])
+      .mint(id, this.accounts[0])
       .send({ from: this.accounts[0] });
   }
 
@@ -163,7 +174,7 @@ export default class PxgLib extends Web3Util {
       .call();
     return {
       tokenId: token,
-      label: `${label}.pxg.eth`,
+      label: `${label}.${this.constants.NODE}`,
       name: label,
     };
   }
@@ -175,7 +186,9 @@ export default class PxgLib extends Web3Util {
   }
 
   private getNode(subdomain: string) {
-    return namehash.hash(namehash.normalize(`${subdomain}.pxg.eth`));
+    return namehash.hash(
+      namehash.normalize(`${subdomain}.${this.constants.NODE}`)
+    );
   }
 
   getReverseRecord(address: string) {
@@ -223,9 +236,9 @@ export default class PxgLib extends Web3Util {
 
     const nftContract = new this.web3.eth.Contract(abi as any, address);
 
-    // const tokenUri = await nftContract.methods.tokenURI(tokenId).call();
+    const tokenUri = await nftContract.methods.tokenURI(tokenId).call();
 
-    const tokenUri = "https://pxg-prod.herokuapp.com/metadata/1";
+    // const tokenUri = "https://pxg-prod.herokuapp.com/metadata/1";
 
     let metadata = {};
 
@@ -333,4 +346,7 @@ export function normalizeIpfs(str: string) {
   return str.replace("ipfs://", "https://ipfs.infura.io/ipfs/");
 }
 
-export const pxgLib = new PxgLib();
+export const pxgLib = new PxgLib({ network: "rinkeby" });
+
+// @ts-ignore
+window.pxgLib = pxgLib;

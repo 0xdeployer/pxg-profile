@@ -15,6 +15,7 @@ import Links from "../components/Links";
 import Button from "../components/Button";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Nft from "../components/Nft";
+import { pxgLib } from "../pxg-lib";
 
 export const styles = {
   avatarCard: css`
@@ -112,7 +113,7 @@ export default function Profile() {
 
                   {profile.data?.label && (
                     <Spacer t="1.2rem" b="1.2rem">
-                      <P weight="700">{`${profile.data.label}.pxg.eth`}</P>
+                      <P weight="700">{`${profile.data.label}.${pxgLib.constants.NODE}`}</P>
                     </Spacer>
                   )}
                   {profile.data?.owner && (

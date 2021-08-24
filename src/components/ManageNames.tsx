@@ -58,7 +58,7 @@ export default function ManageNames() {
 
       <Spacer t="1.6rem">
         <div css={styles.domainBox}>
-          <P weight="bold">{`${profile.data?.label}.pxg.eth`}</P>
+          <P weight="bold">{`${profile.data?.label}.${pxgLib.constants.NODE}`}</P>
           <Checkmark />
         </div>
       </Spacer>

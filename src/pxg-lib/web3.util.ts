@@ -44,6 +44,7 @@ class Emitter {
 const getBlock = (web3: Web3, ...args: any[]): Promise<number> =>
   new Promise((resolve) => {
     // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-types
     web3.eth.getBlock(...args, (err: {}, block: { number: number }) => {
       resolve(err || !block ? -1 : block.number);
     });
