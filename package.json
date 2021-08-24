@@ -82,7 +82,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "CI= node scripts/build.js",
+    "build": "CI= node scripts/build.js && cp _redirects ./build/_redirects",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
