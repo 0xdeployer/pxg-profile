@@ -69,7 +69,7 @@ export default function Profile() {
   const [apiOffset, updateApiOffset] = React.useState(0);
   const [hideLoadMore, updateHideLoadMore] = React.useState(true);
   const [loading, updateLoading] = React.useState(false);
-
+  console.log(nfts);
   async function getNfts(offset = apiOffset) {
     if (!profile.data?.owner) return;
     updateLoading(true);
@@ -87,13 +87,28 @@ export default function Profile() {
       updateHideLoadMore(false);
     }
     const assets = res?.assets ?? [];
-    updateNfts((c: any) => [...(c ?? []), ...assets]);
+    const filtered = assets.filter((nft: any) => {
+      if (profile.nfts && profile.nfts.length > 0) {
+        const found = profile.nfts.find(
+          (item) =>
+            item.contract_address.toLowerCase() ===
+              nft.asset_contract.address.toLowerCase() &&
+            item.token_id == nft.token_id
+        );
+        return !found;
+      } else {
+        return true;
+      }
+    });
+    updateNfts((c: any) => [...(c ?? []), ...filtered]);
     updateLoading(false);
   }
 
   React.useEffect(() => {
-    getNfts();
-  }, [profile.data?.owner]);
+    if (!profile.loading) {
+      getNfts();
+    }
+  }, [profile.data?.owner, profile.loading]);
 
   return (
     <>
@@ -190,7 +205,7 @@ export default function Profile() {
                 </Grid>
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Spacer t="2rem">
-                    {!hideLoadMore && (
+                    {!hideLoadMore && nfts && nfts.length > 0 && (
                       <Button
                         variant="round"
                         disabled={loading}

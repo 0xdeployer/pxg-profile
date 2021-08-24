@@ -88,6 +88,7 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
       updateNfts(nfts);
     }
     updateExhibitsLoading(false);
+    updateLoading(false);
   };
 
   React.useEffect(() => {
@@ -142,7 +143,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
           avatar,
           label: namehash.normalize(`${match.params.name}`),
         }));
-        updateLoading(false);
       };
 
       getData();
