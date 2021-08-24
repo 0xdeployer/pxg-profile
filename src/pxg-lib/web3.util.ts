@@ -1,4 +1,5 @@
-import Web3 from "web3";
+import { createAlchemyWeb3, AlchemyWeb3 } from "@alch/alchemy-web3";
+
 import { provider } from "web3-core";
 
 type EventCallback = (...args: any[]) => void;
@@ -41,7 +42,7 @@ class Emitter {
   }
 }
 
-const getBlock = (web3: Web3, ...args: any[]): Promise<number> =>
+const getBlock = (web3: AlchemyWeb3, ...args: any[]): Promise<number> =>
   new Promise((resolve) => {
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/ban-types
@@ -57,9 +58,9 @@ class PollTx extends Emitter {
 
   watching: boolean;
 
-  web3: Web3;
+  web3: AlchemyWeb3;
 
-  constructor(web3: Web3) {
+  constructor(web3: AlchemyWeb3) {
     super();
     this.web3 = web3;
     this.pending = [];
@@ -79,7 +80,7 @@ class PollTx extends Emitter {
 
   getTransaction = (hash: string) =>
     new Promise((resolve, reject) => {
-      this.web3.eth.getTransaction(hash, (err, data) => {
+      this.web3.eth.getTransaction(hash, (err: any, data: any) => {
         if (err) {
           return reject(err);
         } else {
@@ -149,7 +150,7 @@ export class Web3Util extends Emitter {
   enabled = false;
   accounts?: string[];
   pollTx?: PollTx;
-  web3?: Web3;
+  web3?: AlchemyWeb3;
 
   constructor() {
     super();
@@ -161,7 +162,11 @@ export class Web3Util extends Emitter {
 
   _setWeb3 = () => {
     if (this.provider) {
-      const web3 = new Web3(this.provider);
+      const web3 = createAlchemyWeb3(
+        "https://eth-mainnet.alchemyapi.io/v2/Zdn1C5wpuQp8N8ESdHIqSxSHQaZHGsY2",
+        // @ts-ignore
+        { writeProvider: this.provider }
+      );
       this.pollTx = new PollTx(web3);
 
       this.web3 = web3;
