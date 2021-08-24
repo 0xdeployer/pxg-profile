@@ -69,7 +69,7 @@ const ABI = {
 const REQUEST_URL = {
   local: "http://localhost:3000",
   rinkeby: "http://localhost:3000",
-  live: "http://localhost:3000",
+  live: "https://pxg-prod.herokuapp.com",
 };
 
 const NODES = {
