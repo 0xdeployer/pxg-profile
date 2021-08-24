@@ -2,7 +2,7 @@ import { Web3Util } from "./web3.util";
 import { abi } from "./contracts/glyphs.json";
 import { abi as resolverAbi } from "./contracts/resolver.json";
 import { abi as registrarAbi } from "./contracts/registrar.json";
-import { abi as test721Abi } from "./contracts/test721.json";
+// import { abi as test721Abi } from "./contracts/test721.json";
 import isURL from "validator/lib/isURL";
 // @ts-ignore
 import namehash from "eth-ens-namehash";
@@ -51,6 +51,11 @@ const CONTRACTS = {
     registrar: "0xB454A2d8Fca4FfA3747E8c90bE99d865cb44F98c",
     glyphs: "0x7605F0BbbFfc6A12Fb5a9b969Fb969f36AE6d777",
   },
+  live: {
+    resolver: "0x1B6056F4542508ff9e9B083bf0eCd79aA2418755",
+    registrar: "0x790cA7577EFCa88DAD9ba8EB3865e45b4cE4C7e9",
+    glyphs: "0xf38d6bf300d52ba7880b43cddb3f94ee3c6c4ea6",
+  },
 };
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -64,6 +69,7 @@ const ABI = {
 const REQUEST_URL = {
   local: "http://localhost:3000",
   rinkeby: "http://localhost:3000",
+  live: "http://localhost:3000",
 };
 
 const NODES = {
@@ -96,6 +102,9 @@ export default class PxgLib extends Web3Util {
       case "rinkeby":
         this.contracts = CONTRACTS.rinkeby;
         break;
+      case "live":
+        this.contracts = CONTRACTS.live;
+        break;
       default:
         throw new Error("Should have network set");
     }
@@ -113,16 +122,16 @@ export default class PxgLib extends Web3Util {
     return new this.web3.eth.Contract(ABI[name] as any, this.contracts[name]);
   }
 
-  mintTest(id: string) {
-    const web3 = this.web3;
-    if (!web3) return;
-    if (!this.accounts) return;
-    // @ts-ignore
-    const contract = new web3.eth.Contract(test721Abi, this.contracts.glyphs);
-    return contract.methods
-      .mint(id, this.accounts[0])
-      .send({ from: this.accounts[0] });
-  }
+  // mintTest(id: string) {
+  //   const web3 = this.web3;
+  //   if (!web3) return;
+  //   if (!this.accounts) return;
+  //   // @ts-ignore
+  //   const contract = new web3.eth.Contract(test721Abi, this.contracts.glyphs);
+  //   return contract.methods
+  //     .mint(id, this.accounts[0])
+  //     .send({ from: this.accounts[0] });
+  // }
 
   async getGlyphs() {
     if (!this.web3) return this.err("Web3 not defined");
@@ -238,8 +247,6 @@ export default class PxgLib extends Web3Util {
 
     const tokenUri = await nftContract.methods.tokenURI(tokenId).call();
 
-    // const tokenUri = "https://pxg-prod.herokuapp.com/metadata/1";
-
     let metadata = {};
 
     if (tokenUri) {
@@ -346,7 +353,7 @@ export function normalizeIpfs(str: string) {
   return str.replace("ipfs://", "https://ipfs.infura.io/ipfs/");
 }
 
-export const pxgLib = new PxgLib({ network: "rinkeby" });
+export const pxgLib = new PxgLib({ network: "live" });
 
 // @ts-ignore
 window.pxgLib = pxgLib;

@@ -192,7 +192,8 @@ export class Web3Util extends Emitter {
 
       if (this.provider) {
         if (!this.web3) throw new Error();
-        const accounts = await this.web3.eth.requestAccounts();
+        // @ts-ignore
+        const accounts = await window.ethereum.enable();
         // @ts-ignore
         const windowWeb3 = window.web3.eth.accounts;
         this.accounts = accounts || windowWeb3;
