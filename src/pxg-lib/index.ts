@@ -87,6 +87,7 @@ export default class PxgLib extends Web3Util {
 
   constants = {
     ZERO_ADDRESS,
+    PUNKS_ADDRESS: "0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb",
     NODE: "",
   };
 
@@ -245,19 +246,34 @@ export default class PxgLib extends Web3Util {
 
     const nftContract = new this.web3.eth.Contract(abi as any, address);
 
-    const tokenUri = await nftContract.methods.tokenURI(tokenId).call();
+    if (address.toLowerCase() === this.constants.PUNKS_ADDRESS.toLowerCase()) {
+      return {
+        tokenId,
+        address,
+        metadata: {
+          name: `CryptoPunk #${tokenId}`,
+          image: `https://www.larvalabs.com/cryptopunks/cryptopunk${tokenId}.png`,
+          description:
+            "CryptoPunks launched as a fixed set of 10,000 items in mid-2017 and became one of the inspirations for the ERC-721 standard. They have been featured in places like The New York Times, Christie’s of London, Art|Basel Miami, and The PBS NewsHour.",
+        },
+      };
+    } else {
+      const tokenUri = await nftContract.methods.tokenURI(tokenId).call();
 
-    let metadata = {};
+      let metadata = {};
 
-    if (tokenUri) {
-      metadata = await fetch(normalizeIpfs(tokenUri)).then((res) => res.json());
+      if (tokenUri) {
+        metadata = await fetch(normalizeIpfs(tokenUri)).then((res) =>
+          res.json()
+        );
+      }
+
+      return {
+        tokenId,
+        address,
+        metadata,
+      };
     }
-
-    return {
-      tokenId,
-      address,
-      metadata,
-    };
   }
 
   async setLinks(label: string, links: Links) {

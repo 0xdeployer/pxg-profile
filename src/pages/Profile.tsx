@@ -188,20 +188,23 @@ export default function Profile() {
                     </Grid>
                   )}
                 </Grid>
-                <Spacer t="2rem">
-                  {!hideLoadMore && (
-                    <Button
-                      disabled={loading}
-                      onClick={() => {
-                        const offset = apiOffset + 1;
-                        updateApiOffset(offset);
-                        getNfts(offset * LIMIT);
-                      }}
-                    >
-                      Load more
-                    </Button>
-                  )}
-                </Spacer>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                  <Spacer t="2rem">
+                    {!hideLoadMore && (
+                      <Button
+                        variant="round"
+                        disabled={loading}
+                        onClick={() => {
+                          const offset = apiOffset + 1;
+                          updateApiOffset(offset);
+                          getNfts(offset * LIMIT);
+                        }}
+                      >
+                        Load more
+                      </Button>
+                    )}
+                  </Spacer>
+                </div>
               </Grid>
             </Grid>
           </FloatWrap>
