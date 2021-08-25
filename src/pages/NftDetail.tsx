@@ -49,7 +49,6 @@ function NftDetail() {
       ).then((response) => response.json());
 
       updateNft(item);
-      console.log(item);
     };
     fn();
   }, []);

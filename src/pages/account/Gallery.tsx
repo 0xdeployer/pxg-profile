@@ -33,7 +33,6 @@ export default function Gallery({ updateTitle }: GalleryProps) {
   const profile = React.useContext(ProfileContext);
   const { allGalleries } = profile;
   const hasGalleries = allGalleries && allGalleries.length > 0;
-  console.log(allGalleries);
   React.useEffect(() => {
     updateTitle("NFT Gallery");
   }, []);
@@ -58,7 +57,6 @@ export default function Gallery({ updateTitle }: GalleryProps) {
                   <div
                     onClick={async () => {
                       if (active) return;
-                      console.log(profile);
                       try {
                         await pxgLib.setDefaultGallery(
                           profile?.data?.label as string,

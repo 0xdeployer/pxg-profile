@@ -110,7 +110,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
         let owner = "";
         try {
           owner = await pxgLib.ownerOfNode(match.params.name);
-          console.log(owner);
           if (owner === pxgLib.constants.ZERO_ADDRESS) {
             owner = "";
           }
@@ -148,7 +147,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
       getData();
     }
   }, [context?.connected, match.params.name]);
-  console.log(`EXHIBIT`, exhibitId);
   return (
     <ProfileContext.Provider
       value={{

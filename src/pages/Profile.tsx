@@ -69,7 +69,6 @@ export default function Profile() {
   const [apiOffset, updateApiOffset] = React.useState(0);
   const [hideLoadMore, updateHideLoadMore] = React.useState(true);
   const [loading, updateLoading] = React.useState(false);
-  console.log(nfts);
   async function getNfts(offset = apiOffset) {
     if (!profile.data?.owner) return;
     updateLoading(true);
@@ -177,7 +176,6 @@ export default function Profile() {
                   {nfts &&
                     nfts.length > 0 &&
                     nfts.map((nft: any) => {
-                      console.log(nft);
                       return (
                         <Grid item xs={4}>
                           <Link

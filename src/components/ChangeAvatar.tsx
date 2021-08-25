@@ -95,6 +95,9 @@ const addresses = {
   pxg: "0xf38d6bf300d52ba7880b43cddb3f94ee3c6c4ea6",
   mooncats: "0xc3f733ca98e0dad0386979eb96fb1722a1a05e69",
   punks: "0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb",
+  coolcats: "0x1a92f7381b9f03921564a437210bb9396471050c",
+  guttercats: "0xedb61f74b0d09b2558f1eeb79b247c1f363ae452",
+  bayc: "0x495f947276749ce646f68ac8c248420045cb7b5e",
 };
 
 type ID = keyof typeof addresses;
@@ -171,6 +174,21 @@ const options = [
     id: "punks",
     displayValue: "CryptoPunks",
     link: "https://opensea.io/collection/cryptopunks",
+  },
+  {
+    id: "bayc",
+    displayValue: "Bored Ape Yacht Club",
+    link: "https://opensea.io/collection/boredapeyachtclub",
+  },
+  {
+    id: "coolcats",
+    displayValue: "Cool cats",
+    link: "https://opensea.io/collection/cool-cats-nft",
+  },
+  {
+    id: "guttercats",
+    displayValue: "Gutter Cat Gang",
+    link: "https://opensea.io/collection/guttercatgang",
   },
 ];
 

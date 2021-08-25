@@ -9,10 +9,8 @@ export const Web3Context = React.createContext<{
 
 function Web3Provider({ children }: { children: React.ReactNode }) {
   const [accounts, updateAccounts] = React.useState<string[]>();
-  console.log(accounts);
   React.useEffect(() => {
     pxgLib.on("accountsUpdated", (newAccounts: string[]) => {
-      console.log("hi");
       updateAccounts(newAccounts);
     });
   }, []);

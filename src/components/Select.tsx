@@ -27,7 +27,6 @@ const styles = {
     height: ${heightString};
     display: flex;
     position: relative;
-
     align-items: center;
   `,
   option: css`
@@ -53,7 +52,8 @@ const styles = {
   `,
   active: (len: number) => css`
     overflow: scroll;
-    height: ${3.7 * 3 + len * 0.1}rem;
+
+    height: ${3.7 * 5 + len * 0.1}rem;
     & [data-id="option"]:not(:first-child) {
       border-bottom: 1px solid #c4c4c4;
       background: white;
@@ -63,7 +63,7 @@ const styles = {
 
 export default function Select({ options, selected, onSelect }: SelectProps) {
   const [active, updateActive] = React.useState(false);
-
+  const wrap = React.useRef<HTMLDivElement>(null);
   const onClick = (e: SyntheticEvent<HTMLDivElement>) => {
     if (!active) {
       updateActive(!active);
@@ -84,6 +84,9 @@ export default function Select({ options, selected, onSelect }: SelectProps) {
 
       onSelect(id as string);
       updateActive(false);
+      if (wrap.current) {
+        wrap.current.scrollTop = 0;
+      }
     }
   };
 
@@ -100,6 +103,7 @@ export default function Select({ options, selected, onSelect }: SelectProps) {
         })}
       </select>
       <div
+        ref={wrap}
         css={css(
           styles.optionsWrap,
           active ? styles.active(options.length) : null
