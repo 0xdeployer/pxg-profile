@@ -53,7 +53,7 @@ export default function Links() {
             <Heading tag={4}>Collections</Heading>
           </Spacer>
           {collections.map((item) => (
-            <Spacer b="1rem">
+            <Spacer key={item.key} b="1rem">
               <Link key={item.key} item={item} />
             </Spacer>
           ))}
@@ -66,7 +66,7 @@ export default function Links() {
             <Heading tag={4}>Social</Heading>
           </Spacer>
           {socials.map((item) => (
-            <Spacer b="1rem">
+            <Spacer key={item.key} b="1rem">
               <Link key={item.key} item={item} />
             </Spacer>
           ))}

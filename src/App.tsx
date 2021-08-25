@@ -75,40 +75,41 @@ function App() {
     );
   }
 
-  if (!connectedAddress && !pxgLib.hasProvider) {
-    return (
-      <div css={styles.metamask}>
-        <P weight="bold">
-          You will need to{" "}
-          <a href="https://metamask.io" target="_blank" rel="noreferrer">
-            download Metamask
-          </a>{" "}
-          to interact with this site.
-        </P>
-      </div>
-    );
-  }
-
   return (
     <>
       <Route path="/" exact>
         <RootPath />
       </Route>
-      <Route path="/:name">
-        <ProfileProvider>
-          <Switch>
-            <Route path="/:name" exact>
-              <Profile />
-            </Route>
-            <Route path="/:name/edit">
-              <EditProfile />
-            </Route>
-            <Route path="/:name/:address/:tokenId" exact>
-              <NftDetail />
-            </Route>
-          </Switch>
-        </ProfileProvider>
-      </Route>
+      {!connectedAddress && !pxgLib.hasProvider && (
+        <div css={styles.metamask}>
+          <P weight="bold">
+            You will need to{" "}
+            <a href="https://metamask.io" target="_blank" rel="noreferrer">
+              download Metamask
+            </a>{" "}
+            to interact with this site.
+          </P>
+        </div>
+      )}
+      {pxgLib.hasProvider && (
+        <>
+          <Route path="/:name">
+            <ProfileProvider>
+              <Switch>
+                <Route path="/:name" exact>
+                  <Profile />
+                </Route>
+                <Route path="/:name/edit">
+                  <EditProfile />
+                </Route>
+                <Route path="/:name/:address/:tokenId" exact>
+                  <NftDetail />
+                </Route>
+              </Switch>
+            </ProfileProvider>
+          </Route>
+        </>
+      )}
     </>
   );
 }

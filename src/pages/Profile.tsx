@@ -131,13 +131,7 @@ export default function Profile() {
                     </Spacer>
                   )}
                   {profile.data?.owner && (
-                    <a
-                      href={`https://etherscan.io/address/${profile.data.owner}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <WalletAddress address={profile.data.owner} />
-                    </a>
+                    <WalletAddress address={profile.data.owner} />
                   )}
                   <Links />
                 </div>
@@ -175,9 +169,9 @@ export default function Profile() {
                 <Grid container spacing={2}>
                   {nfts &&
                     nfts.length > 0 &&
-                    nfts.map((nft: any) => {
+                    nfts.map((nft: any, i: any) => {
                       return (
-                        <Grid item xs={4}>
+                        <Grid key={i} item xs={6} sm={4}>
                           <Link
                             to={`/${profile.data?.label}/${nft.asset_contract.address}/${nft.token_id}`}
                           >
@@ -187,7 +181,7 @@ export default function Profile() {
                       );
                     })}
                   {loading && (
-                    <Grid item xs={4}>
+                    <Grid item xs={6} sm={4}>
                       <div
                         css={css(
                           styles.loadingWrap,
