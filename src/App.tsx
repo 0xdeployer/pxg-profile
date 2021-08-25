@@ -9,6 +9,7 @@ import ProfileProvider from "./components/ProfileContext";
 import NftDetail from "./pages/NftDetail";
 import EditProfile from "./pages/EditProfile";
 import P from "./components/P";
+import RootPath from "./pages/RootPath";
 
 const styles = {
   connect: css`
@@ -90,6 +91,9 @@ function App() {
 
   return (
     <>
+      <Route path="/" exact>
+        <RootPath />
+      </Route>
       <Route path="/:name">
         <ProfileProvider>
           <Switch>

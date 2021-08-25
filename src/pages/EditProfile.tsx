@@ -79,7 +79,7 @@ export default function EditProfile() {
       </div>
       <FloatWrap>
         <Grid container>
-          <Grid item xs={2}>
+          <Grid item xs={12} sm={2}>
             <Heading tag={5}>Settings</Heading>
             <hr />
             <div css={styles.links}>
@@ -92,7 +92,7 @@ export default function EditProfile() {
               ))}
             </div>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={12} sm={10}>
             <Heading tag={5}>{title}</Heading>
             <hr />
             <Route path="/:name/edit" exact>

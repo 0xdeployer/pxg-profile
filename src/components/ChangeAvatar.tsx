@@ -211,13 +211,13 @@ export default function ChangeAvatar() {
 
   return (
     <>
-      <Grid container>
-        <Grid item xs={3}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={4}>
           <div css={styles.headingWrap}>
             <Heading tag={6}>Change avatar</Heading>
           </div>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={12} sm={8}>
           <div css={styles.selectWrap}>
             <Select
               selected={selectedOption}

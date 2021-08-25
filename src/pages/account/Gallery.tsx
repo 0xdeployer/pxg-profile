@@ -53,7 +53,7 @@ export default function Gallery({ updateTitle }: GalleryProps) {
             {allGalleries?.map((gallery) => {
               const active = profile.exhibitId === gallery.id;
               return (
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <div
                     onClick={async () => {
                       if (active) return;

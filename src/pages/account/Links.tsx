@@ -91,7 +91,7 @@ export default function Links({ updateTitle }: LinksProps) {
         <Heading tag={6}>Collections</Heading>
       </Spacer>
       <Grid container spacing={3}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <div css={styles.inputWrap}>
             <TextInput
               name="opensea"
@@ -123,7 +123,7 @@ export default function Links({ updateTitle }: LinksProps) {
             />
           </div>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <div css={styles.inputWrap}>
             <TextInput
               name="cargo"

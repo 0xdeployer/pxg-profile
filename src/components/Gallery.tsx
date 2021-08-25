@@ -49,7 +49,7 @@ function Gallery() {
           nfts.length > 0 &&
           nfts.map((nft) => {
             return (
-              <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                 <Link
                   to={`/${data?.label}/${nft.contract_address}/${nft.token_id}`}
                 >

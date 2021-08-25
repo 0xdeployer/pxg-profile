@@ -121,7 +121,7 @@ export default function Profile() {
           )}
           <FloatWrap>
             <Grid container spacing={2}>
-              <Grid item xs={3}>
+              <Grid item xs={12} md={3}>
                 <div css={styles.avatarCard}>
                   <Avatar src={profile?.data?.avatar?.metadata?.image} />
 
@@ -142,7 +142,7 @@ export default function Profile() {
                   <Links />
                 </div>
               </Grid>
-              <Grid item xs={9}>
+              <Grid item xs={12} md={9}>
                 {profile.loading && (
                   <>
                     <div css={styles.loadingWrap}>
@@ -170,8 +170,8 @@ export default function Profile() {
           </FloatWrap>
           <FloatWrap background="none">
             <Grid container spacing={2}>
-              <Grid item xs={3}></Grid>
-              <Grid item xs={9}>
+              <Grid item xs={12} md={3}></Grid>
+              <Grid item xs={12} md={9}>
                 <Grid container spacing={2}>
                   {nfts &&
                     nfts.length > 0 &&
