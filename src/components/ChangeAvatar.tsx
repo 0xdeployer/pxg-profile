@@ -99,6 +99,7 @@ const addresses = {
   guttercats: "0xedb61f74b0d09b2558f1eeb79b247c1f363ae452",
   bayc: "0x495f947276749ce646f68ac8c248420045cb7b5e",
   "0n1": "0x3bf2922f4520a8ba0c2efc3d2a1539678dad5e9d",
+  penguins: "0xbd3531da5cf5857e7cfaa92426877b022e612cf8",
 };
 
 type ID = keyof typeof addresses;
@@ -195,6 +196,11 @@ const options = [
     id: "guttercats",
     displayValue: "Gutter Cat Gang",
     link: "https://opensea.io/collection/guttercatgang",
+  },
+  {
+    id: "penguins",
+    displayValue: "Pudgy Penguins",
+    link: "https://opensea.io/collection/pudgypenguins",
   },
 ];
 
