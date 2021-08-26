@@ -16,6 +16,8 @@ import Button from "../components/Button";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Nft from "../components/Nft";
 import { pxgLib } from "../pxg-lib";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
+import Heading from "../components/Heading";
 
 export const styles = {
   avatarCard: css`
@@ -66,6 +68,7 @@ export default function Profile() {
   } = useRouteMatch<{ name: string }>();
 
   const [nfts, updateNfts] = React.useState<any>(null);
+  const [copied, updateCopied] = React.useState<boolean>(false);
   const [apiOffset, updateApiOffset] = React.useState(0);
   const [hideLoadMore, updateHideLoadMore] = React.useState(true);
   const [loading, updateLoading] = React.useState(false);
@@ -133,7 +136,64 @@ export default function Profile() {
                   {profile.data?.owner && (
                     <WalletAddress address={profile.data.owner} />
                   )}
+
                   <Links />
+                  <hr />
+                  {profile.data?.label && (
+                    <>
+                      <Spacer t="2.4rem" b="1.6rem">
+                        <Heading tag={4}>Direct link</Heading>
+                      </Spacer>
+                      <div
+                        css={css`
+                          display: flex;
+                          align-items: center;
+                          cursor: pointer;
+                        `}
+                        onClick={async () => {
+                          try {
+                            await navigator.clipboard.writeText(
+                              `https://👾👾.to/${profile.data?.label}`
+                            );
+                            updateCopied(true);
+                            setTimeout(() => {
+                              updateCopied(false);
+                            }, 3000);
+                          } catch (e) {
+                            alert(
+                              "Could not write to clipboard. Try copying manually."
+                            );
+                          }
+                        }}
+                      >
+                        <P
+                          styles={{
+                            root: css`
+                              font-size: 1.4rem;
+                              word-break: break-all;
+                            `,
+                          }}
+                        >
+                          {`https://👾👾.to/${profile.data?.label}`}
+                        </P>
+                        <FileCopyIcon
+                          style={{ marginLeft: "0.8rem", color: "#2d2d2d" }}
+                        />
+                      </div>
+                      {copied && (
+                        <P
+                          styles={{
+                            root: css`
+                              font-size: 1.4rem;
+                              color: green;
+                            `,
+                          }}
+                        >
+                          Copied!
+                        </P>
+                      )}
+                    </>
+                  )}
                 </div>
               </Grid>
               <Grid item xs={12} md={9}>
@@ -151,7 +211,7 @@ export default function Profile() {
                       <div css={styles.forSale}>
                         <P weight="bold">
                           This name may be available. You can register this name{" "}
-                          <a href="">here</a>.
+                          <a href="https://pxg.pixelglyphs.io">here</a>.
                         </P>
                       </div>
                     )}

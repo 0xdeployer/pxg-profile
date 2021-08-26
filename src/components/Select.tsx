@@ -99,7 +99,11 @@ export default function Select({ options, selected, onSelect }: SelectProps) {
     <div css={styles.wrap} onClick={onClick}>
       <select css={styles.selectRoot}>
         {options.map(({ id, displayValue }) => {
-          return <option value={id}>{displayValue}</option>;
+          return (
+            <option key={id} value={id}>
+              {displayValue}
+            </option>
+          );
         })}
       </select>
       <div

@@ -98,6 +98,7 @@ const addresses = {
   coolcats: "0x1a92f7381b9f03921564a437210bb9396471050c",
   guttercats: "0xedb61f74b0d09b2558f1eeb79b247c1f363ae452",
   bayc: "0x495f947276749ce646f68ac8c248420045cb7b5e",
+  "0n1": "0x3bf2922f4520a8ba0c2efc3d2a1539678dad5e9d",
 };
 
 type ID = keyof typeof addresses;
@@ -174,6 +175,11 @@ const options = [
     id: "punks",
     displayValue: "CryptoPunks",
     link: "https://opensea.io/collection/cryptopunks",
+  },
+  {
+    id: "0n1",
+    displayValue: "0N1 Force",
+    linke: "https://opensea.io/collection/0n1-force",
   },
   {
     id: "bayc",
