@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 import { Grid } from "@material-ui/core";
 import React, { useContext } from "react";
 import { pxgLib } from "../pxg-lib";
-import web3Util from "../pxg-lib/web3.util";
 import Button from "./Button";
 import Checkmark from "./Checkmark";
 import Heading from "./Heading";

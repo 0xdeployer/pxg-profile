@@ -52,15 +52,12 @@ export const styles = {
     justify-content: center;
     align-items: center;
     height: 100%;
-    & p {
-      color: #8c8c8c;
-    }
   `,
 };
 
 const LIMIT = 20;
 
-export default function Profile() {
+export default function Profile({ connect }: { connect: () => any }) {
   const context = React.useContext(Web3Context);
   const profile = React.useContext(ProfileContext);
   const {
@@ -114,169 +111,179 @@ export default function Profile() {
 
   return (
     <>
-      {context?.connected && (
-        <>
-          {context.accounts?.[0].toLowerCase() ===
+      <>
+        {context &&
+          context.hasProvider &&
+          context.connected &&
+          context.accounts?.[0]?.toLowerCase() ===
             profile.data?.owner?.toLowerCase() && (
             <div css={styles.editBar}>
-              <Link to={`/${name}/edit`}>Edit profile</Link>
+              <Link to={`/${name}/edit`}>
+                <Button variant="roundAlt">Edit profile</Button>
+              </Link>
             </div>
           )}
-          <FloatWrap>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={3}>
-                <div css={styles.avatarCard}>
-                  <Avatar src={profile?.data?.avatar?.metadata?.image} />
+        {context && context.hasProvider && !context.connected && (
+          <div css={styles.editBar}>
+            <Button onClick={connect} variant="roundAlt">
+              Connect wallet
+            </Button>
+          </div>
+        )}
+        <FloatWrap>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+              <div css={styles.avatarCard}>
+                <Avatar src={profile?.data?.avatar?.metadata?.image} />
 
-                  {profile.data?.label && (
-                    <Spacer t="1.2rem" b="1.2rem">
-                      <P weight="700">{`${profile.data.label}.${pxgLib.constants.NODE}`}</P>
+                {profile.data?.label && (
+                  <Spacer t="1.2rem" b="1.2rem">
+                    <P weight="700">{`${profile.data.label}.${pxgLib.constants.NODE}`}</P>
+                  </Spacer>
+                )}
+                {profile.data?.owner && (
+                  <WalletAddress address={profile.data.owner} />
+                )}
+
+                <Links />
+                <hr />
+                {profile.data?.label && (
+                  <>
+                    <Spacer t="2.4rem" b="1.6rem">
+                      <Heading tag={4}>Direct link</Heading>
                     </Spacer>
-                  )}
-                  {profile.data?.owner && (
-                    <WalletAddress address={profile.data.owner} />
-                  )}
-
-                  <Links />
-                  <hr />
-                  {profile.data?.label && (
-                    <>
-                      <Spacer t="2.4rem" b="1.6rem">
-                        <Heading tag={4}>Direct link</Heading>
-                      </Spacer>
-                      <div
-                        css={css`
-                          display: flex;
-                          align-items: center;
-                          cursor: pointer;
-                        `}
-                        onClick={async () => {
-                          try {
-                            await navigator.clipboard.writeText(
-                              `https://👾👾.to/${profile.data?.label}`
-                            );
-                            updateCopied(true);
-                            setTimeout(() => {
-                              updateCopied(false);
-                            }, 3000);
-                          } catch (e) {
-                            alert(
-                              "Could not write to clipboard. Try copying manually."
-                            );
-                          }
+                    <div
+                      css={css`
+                        display: flex;
+                        align-items: center;
+                        cursor: pointer;
+                      `}
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(
+                            `https://pxg.wtf/${profile.data?.label}`
+                          );
+                          updateCopied(true);
+                          setTimeout(() => {
+                            updateCopied(false);
+                          }, 3000);
+                        } catch (e) {
+                          alert(
+                            "Could not write to clipboard. Try copying manually."
+                          );
+                        }
+                      }}
+                    >
+                      <P
+                        styles={{
+                          root: css`
+                            font-size: 1.4rem;
+                            word-break: break-all;
+                          `,
                         }}
                       >
-                        <P
-                          styles={{
-                            root: css`
-                              font-size: 1.4rem;
-                              word-break: break-all;
-                            `,
-                          }}
-                        >
-                          {`https://👾👾.to/${profile.data?.label}`}
-                        </P>
-                        <FileCopyIcon
-                          style={{ marginLeft: "0.8rem", color: "#2d2d2d" }}
-                        />
-                      </div>
-                      {copied && (
-                        <P
-                          styles={{
-                            root: css`
-                              font-size: 1.4rem;
-                              color: green;
-                            `,
-                          }}
-                        >
-                          Copied!
-                        </P>
-                      )}
-                    </>
+                        {`https://pxg.wtf/${profile.data?.label}`}
+                      </P>
+                      <FileCopyIcon
+                        style={{ marginLeft: "0.8rem", color: "#2d2d2d" }}
+                      />
+                    </div>
+                    {copied && (
+                      <P
+                        styles={{
+                          root: css`
+                            font-size: 1.4rem;
+                            color: green;
+                          `,
+                        }}
+                      >
+                        Copied!
+                      </P>
+                    )}
+                  </>
+                )}
+              </div>
+            </Grid>
+            <Grid item xs={12} md={9}>
+              {profile.loading && (
+                <>
+                  <div css={styles.loadingWrap}>
+                    <LoadingIndicator />
+                  </div>
+                </>
+              )}
+
+              {!profile.loading && (
+                <>
+                  {!profile.data?.owner && (
+                    <div css={styles.forSale}>
+                      <P weight="bold">
+                        This name may be available. You can register this name{" "}
+                        <a href="https://pxg.pixelglyphs.io">here</a>.
+                      </P>
+                    </div>
                   )}
-                </div>
-              </Grid>
-              <Grid item xs={12} md={9}>
-                {profile.loading && (
-                  <>
-                    <div css={styles.loadingWrap}>
+                </>
+              )}
+
+              <Gallery />
+            </Grid>
+          </Grid>
+        </FloatWrap>
+        <FloatWrap background="none">
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}></Grid>
+            <Grid item xs={12} md={9}>
+              <Grid container spacing={2}>
+                {nfts &&
+                  nfts.length > 0 &&
+                  nfts.map((nft: any, i: any) => {
+                    return (
+                      <Grid key={i} item xs={6} sm={4}>
+                        <Link
+                          to={`/${profile.data?.label}/${nft.asset_contract.address}/${nft.token_id}`}
+                        >
+                          <Nft nft={nft} />
+                        </Link>
+                      </Grid>
+                    );
+                  })}
+                {loading && (
+                  <Grid item xs={6} sm={4}>
+                    <div
+                      css={css(
+                        styles.loadingWrap,
+                        css`
+                          min-height: 200px;
+                        `
+                      )}
+                    >
                       <LoadingIndicator />
                     </div>
-                  </>
+                  </Grid>
                 )}
-
-                {!profile.loading && (
-                  <>
-                    {!profile.data?.owner && (
-                      <div css={styles.forSale}>
-                        <P weight="bold">
-                          This name may be available. You can register this name{" "}
-                          <a href="https://pxg.pixelglyphs.io">here</a>.
-                        </P>
-                      </div>
-                    )}
-                  </>
-                )}
-
-                <Gallery />
               </Grid>
-            </Grid>
-          </FloatWrap>
-          <FloatWrap background="none">
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={3}></Grid>
-              <Grid item xs={12} md={9}>
-                <Grid container spacing={2}>
-                  {nfts &&
-                    nfts.length > 0 &&
-                    nfts.map((nft: any, i: any) => {
-                      return (
-                        <Grid key={i} item xs={6} sm={4}>
-                          <Link
-                            to={`/${profile.data?.label}/${nft.asset_contract.address}/${nft.token_id}`}
-                          >
-                            <Nft nft={nft} />
-                          </Link>
-                        </Grid>
-                      );
-                    })}
-                  {loading && (
-                    <Grid item xs={6} sm={4}>
-                      <div
-                        css={css(
-                          styles.loadingWrap,
-                          css`
-                            min-height: 200px;
-                          `
-                        )}
-                      >
-                        <LoadingIndicator />
-                      </div>
-                    </Grid>
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <Spacer t="2rem">
+                  {!hideLoadMore && nfts && nfts.length > 0 && (
+                    <Button
+                      variant="round"
+                      disabled={loading}
+                      onClick={() => {
+                        const offset = apiOffset + 1;
+                        updateApiOffset(offset);
+                        getNfts(offset * LIMIT);
+                      }}
+                    >
+                      Load more
+                    </Button>
                   )}
-                </Grid>
-                <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Spacer t="2rem">
-                    {!hideLoadMore && nfts && nfts.length > 0 && (
-                      <Button
-                        variant="round"
-                        disabled={loading}
-                        onClick={() => {
-                          const offset = apiOffset + 1;
-                          updateApiOffset(offset);
-                          getNfts(offset * LIMIT);
-                        }}
-                      >
-                        Load more
-                      </Button>
-                    )}
-                  </Spacer>
-                </div>
-              </Grid>
+                </Spacer>
+              </div>
             </Grid>
-          </FloatWrap>
-        </>
-      )}
+          </Grid>
+        </FloatWrap>
+      </>
     </>
   );
 }

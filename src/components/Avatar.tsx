@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import React from "react";
-import { normalizeIpfs } from "../pxg-lib";
+import { normalizeIpfs } from "pxg-js";
 import { Avatar as BlankAvatar } from "@material-ui/core";
 
 type AvatarProps = {

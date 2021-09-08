@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useRouteMatch } from "react-router";
-import { AvatarType, pxgLib } from "../pxg-lib";
+import { pxgLib } from "../pxg-lib";
+import { AvatarType } from "pxg-js";
 import { Web3Context } from "../Web3Provider";
 // @ts-ignore
 import namehash from "eth-ens-namehash";
+import { REQUEST_URL } from "../pxg-lib/constants";
 
 type ProfileDataType = {
   owner: string;
@@ -69,7 +71,6 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   const match = useRouteMatch<{ name: string }>();
   const [data, updateData] = useState<ProfileDataType | null>(null);
   const [nfts, updateNfts] = useState<NFTFromCyber[]>();
-  const [allNfts, updateAllNfts] = useState<NFTFromCyber[]>();
   const [exhibitId, updateExhibitId] = useState<string>();
   const [allGalleries, updateAllGalleries] = useState<CyberExhibit[]>();
   const [links, updateLinks] = useState<LinkType[]>();
@@ -92,60 +93,62 @@ function ProfileProvider({ children }: { children: React.ReactNode }) {
   };
 
   React.useEffect(() => {
-    if (context?.connected) {
-      const getAllGalleries = async () => {
-        const data = await fetch(
-          `https://cyber-jfl9w.ondigitalocean.app/experiences/user/${pxgLib.accounts?.[0].toLowerCase()}`
-        ).then((res) => res.json());
-        if (data?.success) {
-          updateAllGalleries(
-            data.exhibits.filter(
-              (item: any) =>
-                item.owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()
-            )
-          );
+    const getAllGalleries = async () => {
+      const data = await fetch(
+        `https://cyber-jfl9w.ondigitalocean.app/experiences/user/${pxgLib.accounts?.[0].toLowerCase()}`
+      ).then((res) => res.json());
+      if (data?.success) {
+        updateAllGalleries(
+          data.exhibits.filter(
+            (item: any) =>
+              item.owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()
+          )
+        );
+      }
+    };
+    const getData = async () => {
+      let owner = "";
+      let currentLinks;
+      let avatar: AvatarType;
+
+      const data = await fetch(
+        `${REQUEST_URL}/pxg/profile/${match.params.name}`
+      ).then((res) => res.json());
+
+      ({ owner, currentLinks, avatar } = data);
+
+      try {
+        if (owner === pxgLib.constants.ZERO_ADDRESS) {
+          owner = "";
         }
-      };
-      const getData = async () => {
-        let owner = "";
-        try {
-          owner = await pxgLib.ownerOfNode(match.params.name);
-          if (owner === pxgLib.constants.ZERO_ADDRESS) {
-            owner = "";
-          }
-          if (!owner) return;
+        if (!owner) {
+          updateLoading(false);
+        }
+        if (owner) {
           if (owner.toLowerCase() === pxgLib.accounts?.[0].toLowerCase()) {
             getAllGalleries();
           }
-          const { links: currentLinks } = await pxgLib.getLinks(
-            match.params.name
-          );
           updateLinks(currentLinks);
           getGallery();
-        } catch (e) {
-          if (e.message.includes("owner query for nonexistent token")) {
-            // can register token
-          } else {
-            // maybe can register name
-          }
-          console.log("error", e.message);
         }
+      } catch (e) {
+        if (e.message.includes("owner query for nonexistent token")) {
+          // can register token
+        } else {
+          // maybe can register name
+        }
+        console.log("error", e.message);
+      }
 
-        let avatar: AvatarType;
-        try {
-          avatar = await pxgLib.getDefaultAvatar(match.params.name);
-        } catch (e) {}
+      updateData((data) => ({
+        ...(data ?? {}),
+        owner,
+        avatar,
+        label: namehash.normalize(`${match.params.name}`),
+      }));
+    };
 
-        updateData((data) => ({
-          ...(data ?? {}),
-          owner,
-          avatar,
-          label: namehash.normalize(`${match.params.name}`),
-        }));
-      };
-
-      getData();
-    }
+    getData();
   }, [context?.connected, match.params.name]);
   return (
     <ProfileContext.Provider

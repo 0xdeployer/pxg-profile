@@ -2,6 +2,7 @@ import { css } from "@emotion/react";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { pxgLib } from "../pxg-lib";
+import Button from "./Button";
 import Checkmark from "./Checkmark";
 import Heading from "./Heading";
 import P from "./P";
@@ -50,6 +51,37 @@ export default function ManageNames() {
     fn();
   }, [profile?.data?.label]);
 
+  const [ens, updateEns] = React.useState(null);
+  const [reverseRecord, updateReverseRecord] = React.useState<null | string>(
+    null
+  );
+  React.useEffect(() => {
+    const fn = async () => {
+      try {
+        // @ts-ignore
+        const _ens = await import("@ensdomains/ensjs");
+        const ens = new _ens.default({
+          provider: pxgLib.provider,
+          ensAddress: _ens.getEnsAddress("1"),
+        });
+
+        console.log(_ens);
+        updateEns(ens);
+
+        const { name } = await ens.getName(pxgLib?.accounts?.[0]);
+        updateReverseRecord(name);
+      } catch (e) {
+        console.error("Error using ensjs library", e.message);
+      }
+    };
+
+    fn();
+  }, []);
+
+  const name = `${profile.data?.label}.${pxgLib.constants.NODE}`;
+  const reverseSetToCurrentName =
+    reverseRecord && reverseRecord.toLowerCase() === name.toLowerCase();
+
   return (
     <div>
       <div css={styles.headingWrap}>
@@ -58,10 +90,41 @@ export default function ManageNames() {
 
       <Spacer t="1.6rem">
         <div css={styles.domainBox}>
-          <P weight="bold">{`${profile.data?.label}.${pxgLib.constants.NODE}`}</P>
+          <P weight="bold">{name}</P>
           <Checkmark />
         </div>
       </Spacer>
+
+      {ens && (
+        <>
+          {reverseSetToCurrentName && (
+            <Spacer t="1.6rem">
+              <P
+                styles={{
+                  root: css`
+                    color: #2d2d2d;
+                  `,
+                }}
+              >
+                Reverse ENS record set to {name}
+              </P>
+            </Spacer>
+          )}
+          <Spacer t="1.6rem">
+            <Button
+              disabled={!!reverseSetToCurrentName}
+              variant="round"
+              onClick={() => {
+                console.log(name);
+                // @ts-ignore
+                ens?.setReverseRecord(name);
+              }}
+            >
+              Set reverse record
+            </Button>
+          </Spacer>
+        </>
+      )}
 
       {inWallet.length > 0 && (
         <Spacer t="3.2rem">

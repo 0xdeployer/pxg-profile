@@ -67,49 +67,40 @@ function App() {
     }
   }, []);
 
-  if (!connectedAddress && pxgLib.hasProvider) {
-    return (
-      <div css={styles.connect}>
-        <Button onClick={connect}>Connect Wallet</Button>
-      </div>
-    );
-  }
+  // if (!connectedAddress && pxgLib.hasProvider) {
+  //   return (
+  //     <div css={styles.connect}>
+  //       <Button onClick={connect}>Connect Wallet</Button>
+  //     </div>
+  //   );
+  // }
 
   return (
     <>
       <Route path="/" exact>
         <RootPath />
       </Route>
-      {!connectedAddress && !pxgLib.hasProvider && (
-        <div css={styles.metamask}>
-          <P weight="bold">
-            You will need to{" "}
-            <a href="https://metamask.io" target="_blank" rel="noreferrer">
-              download Metamask
-            </a>{" "}
-            to interact with this site.
-          </P>
-        </div>
-      )}
-      {pxgLib.hasProvider && (
-        <>
-          <Route path="/:name">
-            <ProfileProvider>
-              <Switch>
-                <Route path="/:name" exact>
-                  <Profile />
-                </Route>
+
+      <>
+        <Route path="/:name">
+          <ProfileProvider>
+            <Switch>
+              <Route path="/:name" exact>
+                <Profile connect={connect} />
+              </Route>
+
+              <Route path="/:name/:address/:tokenId" exact>
+                <NftDetail />
+              </Route>
+              {pxgLib.hasProvider && connectedAddress && (
                 <Route path="/:name/edit">
                   <EditProfile />
                 </Route>
-                <Route path="/:name/:address/:tokenId" exact>
-                  <NftDetail />
-                </Route>
-              </Switch>
-            </ProfileProvider>
-          </Route>
-        </>
-      )}
+              )}
+            </Switch>
+          </ProfileProvider>
+        </Route>
+      </>
     </>
   );
 }
