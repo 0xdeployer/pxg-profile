@@ -82,7 +82,8 @@
     "start": "node scripts/start.js",
     "build": "CI= node scripts/build.js && cp _redirects ./build/_redirects",
     "test": "node scripts/test.js",
-    "pretty": "yarn prettier -u --write ./src/**"
+    "pretty": "yarn prettier -u --write ./src/**",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -169,6 +170,7 @@
     "eslint": "^7.32.0",
     "eslint-plugin-react": "^7.25.1",
     "eth-ens-namehash": "^2.0.8",
+    "husky": "^7.0.2",
     "prettier": "^2.3.2"
   }
 }
