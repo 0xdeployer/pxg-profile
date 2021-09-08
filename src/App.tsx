@@ -89,14 +89,15 @@ function App() {
                 <Profile connect={connect} />
               </Route>
 
-              <Route path="/:name/:address/:tokenId" exact>
-                <NftDetail />
-              </Route>
               {pxgLib.hasProvider && connectedAddress && (
                 <Route path="/:name/edit">
                   <EditProfile />
                 </Route>
               )}
+
+              <Route path="/:name/:address/:tokenId" exact>
+                <NftDetail />
+              </Route>
             </Switch>
           </ProfileProvider>
         </Route>

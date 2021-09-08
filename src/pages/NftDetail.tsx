@@ -55,6 +55,7 @@ function NftDetail() {
   if (
     nft &&
     context.data &&
+    nft.owner &&
     nft.owner.address.toLowerCase() !== context.data?.owner.toLowerCase()
   ) {
     return <Redirect to={`/${name}`} />;
