@@ -13,7 +13,6 @@ type SelectProps = {
   onSelect: (id: string) => any;
 };
 
-const height = 3.7;
 const heightString = `${3.7}rem`;
 
 const styles = {
@@ -118,7 +117,7 @@ export default function Select({ options, selected, onSelect }: SelectProps) {
         </div>
         {rest.map(({ id, displayValue }) => {
           return (
-            <div data-id="option" data-option={id}>
+            <div key={id} data-id="option" data-option={id}>
               <P styles={{ root: styles.option }}>{displayValue}</P>
             </div>
           );

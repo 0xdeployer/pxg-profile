@@ -131,7 +131,7 @@ export default function ManageNames() {
           <Heading tag={6}>In wallet</Heading>
           {inWallet.map(({ name, label }) => {
             return (
-              <Spacer t="1.6rem">
+              <Spacer key={name} t="1.6rem">
                 <div css={styles.domainBox}>
                   <P weight="bold">{label}</P>
                   <a href={`/${name}/edit`}>

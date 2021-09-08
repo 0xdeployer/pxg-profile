@@ -12,7 +12,7 @@ type AvatarProps = {
 };
 
 const styles = {
-  root: (w: string = `5rem`, h: string = `5rem`, isPunk?: boolean) => css`
+  root: (w = `5rem`, h = `5rem`, isPunk?: boolean) => css`
     width: ${w};
     height: ${h};
     overflow: hidden;
@@ -30,7 +30,7 @@ const styles = {
   `,
 };
 
-function Avatar({ src, w, h }: AvatarProps) {
+function Avatar({ src }: AvatarProps) {
   const context = useContext(ProfileContext);
 
   if (!src)

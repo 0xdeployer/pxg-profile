@@ -2,7 +2,7 @@ import React from "react";
 import { css, SerializedStyles } from "@emotion/react";
 
 const styles = {
-  root: (weight: string = "normal", style?: SerializedStyles) =>
+  root: (weight = "normal", style?: SerializedStyles) =>
     css(
       `
     font-weight: ${weight};

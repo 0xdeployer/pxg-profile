@@ -84,7 +84,7 @@ export default function EditProfile() {
             <hr />
             <div css={styles.links}>
               {links.map((item) => (
-                <div>
+                <div key={item.name}>
                   <NavLink exact to={item.path}>
                     {item.name}
                   </NavLink>
