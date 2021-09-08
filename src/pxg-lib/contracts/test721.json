@@ -11009,42 +11009,18 @@
   "ast": {
     "absolutePath": "project:/contracts/Test721.sol",
     "exportedSymbols": {
-      "Address": [
-        6854
-      ],
-      "Context": [
-        6875
-      ],
-      "ERC165": [
-        7102
-      ],
-      "ERC721": [
-        6028
-      ],
-      "ERC721Enumerable": [
-        6500
-      ],
-      "IERC165": [
-        7165
-      ],
-      "IERC721": [
-        6144
-      ],
-      "IERC721Enumerable": [
-        6531
-      ],
-      "IERC721Metadata": [
-        6558
-      ],
-      "IERC721Receiver": [
-        6162
-      ],
-      "Strings": [
-        7078
-      ],
-      "Test721": [
-        7805
-      ]
+      "Address": [6854],
+      "Context": [6875],
+      "ERC165": [7102],
+      "ERC721": [6028],
+      "ERC721Enumerable": [6500],
+      "IERC165": [7165],
+      "IERC721": [6144],
+      "IERC721Enumerable": [6531],
+      "IERC721Metadata": [6558],
+      "IERC721Receiver": [6162],
+      "Strings": [7078],
+      "Test721": [7805]
     },
     "id": 7806,
     "license": "MIT",
@@ -11052,15 +11028,7 @@
     "nodes": [
       {
         "id": 7774,
-        "literals": [
-          "solidity",
-          ">=",
-          "0.4",
-          ".22",
-          "<",
-          "0.9",
-          ".0"
-        ],
+        "literals": ["solidity", ">=", "0.4", ".22", "<", "0.9", ".0"],
         "nodeType": "PragmaDirective",
         "src": "32:32:35"
       },
@@ -11097,15 +11065,7 @@
         "fullyImplemented": true,
         "id": 7805,
         "linearizedBaseContracts": [
-          7805,
-          6500,
-          6531,
-          6028,
-          6558,
-          6144,
-          7102,
-          7165,
-          6875
+          7805, 6500, 6531, 6028, 6558, 6144, 7102, 7165, 6875
         ],
         "name": "Test721",
         "nameLocation": "155:7:35",
@@ -11449,42 +11409,18 @@
   "legacyAST": {
     "absolutePath": "project:/contracts/Test721.sol",
     "exportedSymbols": {
-      "Address": [
-        6854
-      ],
-      "Context": [
-        6875
-      ],
-      "ERC165": [
-        7102
-      ],
-      "ERC721": [
-        6028
-      ],
-      "ERC721Enumerable": [
-        6500
-      ],
-      "IERC165": [
-        7165
-      ],
-      "IERC721": [
-        6144
-      ],
-      "IERC721Enumerable": [
-        6531
-      ],
-      "IERC721Metadata": [
-        6558
-      ],
-      "IERC721Receiver": [
-        6162
-      ],
-      "Strings": [
-        7078
-      ],
-      "Test721": [
-        7805
-      ]
+      "Address": [6854],
+      "Context": [6875],
+      "ERC165": [7102],
+      "ERC721": [6028],
+      "ERC721Enumerable": [6500],
+      "IERC165": [7165],
+      "IERC721": [6144],
+      "IERC721Enumerable": [6531],
+      "IERC721Metadata": [6558],
+      "IERC721Receiver": [6162],
+      "Strings": [7078],
+      "Test721": [7805]
     },
     "id": 7806,
     "license": "MIT",
@@ -11492,15 +11428,7 @@
     "nodes": [
       {
         "id": 7774,
-        "literals": [
-          "solidity",
-          ">=",
-          "0.4",
-          ".22",
-          "<",
-          "0.9",
-          ".0"
-        ],
+        "literals": ["solidity", ">=", "0.4", ".22", "<", "0.9", ".0"],
         "nodeType": "PragmaDirective",
         "src": "32:32:35"
       },
@@ -11537,15 +11465,7 @@
         "fullyImplemented": true,
         "id": 7805,
         "linearizedBaseContracts": [
-          7805,
-          6500,
-          6531,
-          6028,
-          6558,
-          6144,
-          7102,
-          7165,
-          6875
+          7805, 6500, 6531, 6028, 6558, 6144, 7102, 7165, 6875
         ],
         "name": "Test721",
         "nameLocation": "155:7:35",
