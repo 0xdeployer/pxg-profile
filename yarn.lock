@@ -10969,10 +10969,10 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pxg-js@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/pxg-js/-/pxg-js-1.0.4.tgz#a4618a1bbdfd0ecd3c4d0fd4515161e8074c2676"
-  integrity sha512-Wx5fZ6P5EwoU89sTUIkvaNg/bR+GO0Gtl+5KvkAGBEzvYv45jIdNbG13F6XHqfIfN+LrOBrq5s4jPGzXR7Fu8Q==
+pxg-js@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/pxg-js/-/pxg-js-1.0.5.tgz#bbd58bff5f6f70c065a1c71575065317edbbcff8"
+  integrity sha512-Ko92IRnAUrIemUSjhXs4J8Mv7fcYfPe9l8J/S8s7bTVsB0kMXCUOxI2BfEHpA/4NjXHy6Z85M+utdLlZmBGk1g==
   dependencies:
     bn.js "^5.2.0"
     core-js "^3.16.4"
