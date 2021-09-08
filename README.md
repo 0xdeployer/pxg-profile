@@ -6,11 +6,17 @@ PXG.eth domains are extended ENS names which include built in functionality for 
 
 Profiles can be accessed via https://pxg.wtf/:name. For example: [https://pxg.wtf/nftboi](https://pxg.wtf/nftboi)
 
-Each PXG.eth name is an NFT. This is how ownership is tracked. The resolving address of the name will always be the owner of the NFT. You can view existing names on OpenSea [https://opensea.io/collection/pxg-eth](https://opensea.io/collection/pxg-eth)
+Each PXG.eth name is an NFT. This is how ownership is tracked. The resolving address of the name will always be the owner of the NFT. You can view existing names on OpenSea [https://opensea.io/collection/pxg-eth](https://opensea.io/collection/pxg-eth) and you can register new names at [https://pxg.wtf](https://pxg.wtf).
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and immediately ejected :) It uses TypeScript.
 
 ## Contributing
+
+If you'd like to contribute please fork this repo.
+
+We use Husky to run pre-commit hooks. When you commit Husky will run prettier and eslint. If there are errors you will need to fix them prior to committing.
+
+Once your changes are good to go feel free to open a pull request.
 
 ## Available Scripts
 
