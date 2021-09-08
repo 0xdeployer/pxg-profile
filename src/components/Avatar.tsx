@@ -1,7 +1,9 @@
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useContext } from "react";
 import { normalizeIpfs } from "pxg-js";
 import { Avatar as BlankAvatar } from "@material-ui/core";
+import { ProfileContext } from "./ProfileContext";
+import { pxgLib } from "../pxg-lib";
 
 type AvatarProps = {
   src?: string;
@@ -10,7 +12,7 @@ type AvatarProps = {
 };
 
 const styles = {
-  root: (w: string = `5rem`, h: string = `5rem`) => css`
+  root: (w: string = `5rem`, h: string = `5rem`, isPunk?: boolean) => css`
     width: ${w};
     height: ${h};
     overflow: hidden;
@@ -18,15 +20,19 @@ const styles = {
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid #ededed;
     & img {
       max-width: 100%;
       width: 100%;
       height: auto;
+      ${isPunk ? `image-rendering: pixelated;` : ""}
     }
   `,
 };
 
 function Avatar({ src, w, h }: AvatarProps) {
+  const context = useContext(ProfileContext);
+
   if (!src)
     return (
       <BlankAvatar
@@ -36,8 +42,16 @@ function Avatar({ src, w, h }: AvatarProps) {
         `}
       />
     );
+
   return (
-    <div css={styles.root()}>
+    <div
+      css={styles.root(
+        "5rem",
+        "5rem",
+        context.data?.avatar?.address?.toLowerCase() ===
+          pxgLib.constants.PUNK_ADDRESS.toLowerCase()
+      )}
+    >
       <img src={normalizeIpfs(src)} alt="Default Avatar" />
     </div>
   );
