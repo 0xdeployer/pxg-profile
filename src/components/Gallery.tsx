@@ -51,7 +51,9 @@ function Gallery() {
             return (
               <Grid key={i} item xs={12} sm={6} md={4}>
                 <Link
-                  to={`/${data?.label}/${nft.contract_address}/${nft.token_id}`}
+                  to={`/${data?.label}/${
+                    nft.contract_address ?? nft.token_address
+                  }/${nft.token_id}`}
                 >
                   <Nft nft={nft} />
                 </Link>

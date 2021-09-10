@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { pxgLib } from "./pxg-lib";
 import Profile from "./pages/Profile";
 import { Route, Switch } from "react-router-dom";

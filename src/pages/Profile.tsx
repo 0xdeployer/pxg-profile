@@ -90,7 +90,7 @@ export default function Profile({ connect }: { connect: () => any }) {
       if (profile.nfts && profile.nfts.length > 0) {
         const found = profile.nfts.find(
           (item) =>
-            item.contract_address.toLowerCase() ===
+            (item.contract_address ?? item.token_address).toLowerCase() ===
               nft.asset_contract.address.toLowerCase() &&
             item.token_id == nft.token_id
         );

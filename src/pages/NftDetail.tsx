@@ -40,7 +40,7 @@ function NftDetail() {
   React.useEffect(() => {
     const fn = async () => {
       const item = await fetch(
-        `https://api.opensea.io/api/v1/asset/${address}/${tokenId}/`,
+        `https://api.opensea.io/api/v1/asset/${address}/${tokenId}?account_address=${context.data?.owner}`,
         {
           headers: {
             "X-API-KEY": "72fdb7cff7064b70807e0f32d4ec3fa3",
@@ -52,13 +52,29 @@ function NftDetail() {
     };
     fn();
   }, []);
-  if (
-    nft &&
-    context.data &&
-    nft.owner &&
-    nft.owner.address.toLowerCase() !== context.data?.owner.toLowerCase()
-  ) {
-    return <Redirect to={`/${name}`} />;
+
+  // if (
+  //   nft &&
+  //   context.data &&
+  //   nft.owner &&
+  //   !(
+  //     nft.owner.address.toLowerCase() == context.data?.owner.toLowerCase() ||
+  //     nft.ownership?.owner?.address?.toLowerCase() ==
+  //       context.data?.owner.toLowerCase() ||
+  //     nft.creator?.address.toLowerCase() == context.data?.owner.toLowerCase()
+  //   )
+  // ) {
+  //   return <Redirect to={`/${name}`} />;
+  // }
+  let creator;
+  let owner;
+  if (nft) {
+    creator =
+      nft.creator?.address.toLowerCase() == context.data?.owner.toLowerCase();
+    owner =
+      nft.owner.address.toLowerCase() == context.data?.owner.toLowerCase() ||
+      nft.ownership?.owner?.address?.toLowerCase() ==
+        context.data?.owner.toLowerCase();
   }
   return (
     <FloatWrap background="none">
@@ -82,7 +98,17 @@ function NftDetail() {
           <Spacer b="0.8rem">
             <Heading tag={4}>Token ID</Heading>
           </Spacer>
-          <P>{tokenId}</P>
+          <P
+            styles={{
+              root: css`
+                overflow: hidden;
+                width: 100%;
+                text-overflow: ellipsis;
+              `,
+            }}
+          >
+            {tokenId}
+          </P>
         </Grid>
         <Grid item xs={5}>
           <div css={styles.imageFrame}>
@@ -92,7 +118,9 @@ function NftDetail() {
         <Grid item xs={3}>
           <div css={styles.ownerFrame}>
             <Spacer b="0.8rem">
-              <Heading tag={4}>Owned by</Heading>
+              <Heading tag={4}>
+                {creator && !owner ? "Created by" : owner ? "Owned by" : ""}
+              </Heading>
             </Spacer>
             <Spacer b="1.2rem">
               <Avatar src={context.data?.avatar?.metadata?.image} />

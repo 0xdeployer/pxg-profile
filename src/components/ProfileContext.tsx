@@ -42,11 +42,21 @@ export type NFTFromCyber = {
   owner: {
     address: string;
   };
+  creator?: {
+    address: string;
+  };
+  // Opensea
+  ownership?: {
+    owner: {
+      address: string;
+    };
+  };
   name: string;
   image_url: string;
   description: string;
   token_id: string;
   contract_address: string;
+  token_address: string;
   permalink: string;
 };
 
