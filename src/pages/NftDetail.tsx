@@ -79,7 +79,7 @@ function NftDetail() {
   return (
     <FloatWrap background="none">
       <Grid container spacing={2}>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <Spacer b="1.6rem">
             <Heading tag={3}>{nft?.collection.name}</Heading>
           </Spacer>
@@ -110,12 +110,12 @@ function NftDetail() {
             {tokenId}
           </P>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={12} md={5}>
           <div css={styles.imageFrame}>
             <img src={nft?.image_url} />
           </div>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} md={3}>
           <div css={styles.ownerFrame}>
             <Spacer b="0.8rem">
               <Heading tag={4}>
