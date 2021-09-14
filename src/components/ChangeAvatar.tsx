@@ -99,6 +99,7 @@ const addresses = {
   bayc: "0x495f947276749ce646f68ac8c248420045cb7b5e",
   "0n1": "0x3bf2922f4520a8ba0c2efc3d2a1539678dad5e9d",
   penguins: "0xbd3531da5cf5857e7cfaa92426877b022e612cf8",
+  koala: "0x3f5fb35468e9834a43dca1c160c69eaae78b6360",
 };
 
 type ID = keyof typeof addresses;
@@ -200,6 +201,11 @@ const options = [
     id: "penguins",
     displayValue: "Pudgy Penguins",
     link: "https://opensea.io/collection/pudgypenguins",
+  },
+  {
+    id: "koala",
+    displayValue: "Koala Intelligence Agency",
+    link: "https://opensea.io/collection/koala-intelligence-agency",
   },
 ];
 
